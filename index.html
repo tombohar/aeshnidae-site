@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Aeshnidae is a private Asheron's Call server: experience as currency, a shared account bank, skills past the retail cap, and house rules the server enforces itself. Connect at 144.217.84.148:9020.">
+<meta property="og:title" content="Aeshnidae">
+<meta property="og:description" content="A private Asheron's Call world with an economy that holds. Online around the clock.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0B1416" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F1F5F3" media="(prefers-color-scheme: light)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235CC9C2' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M12 3v18'/%3E%3Cpath d='M12 8c-3-4-8-4-10-2 2 3 6 4 10 2Zm0 0c3-4 8-4 10-2-2 3-6 4-10 2Z'/%3E%3Cpath d='M12 12c-3-3-7-3-9-1.5 2 2.5 5.5 3 9 1.5Zm0 0c3-3 7-3 9-1.5-2 2.5-5.5 3-9 1.5Z'/%3E%3C/svg%3E">
+<title>Aeshnidae</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  /* ---------- Tokens: dark-first (the un-stamped default on a dark OS) ---------- */
+  :root {
+    color-scheme: dark light;
+    --ground:       #0B1416;
+    --ground-deep:  #070F11;
+    --surface:      #132126;
+    --surface-alt:  #192B31;
+    --ink:          #E7EEEC;
+    --ink-soft:     #A7B9BA;
+    --ink-faint:    #77898C;
+    --line:         #26393E;
+    --line-soft:    #1B2C31;
+    --accent:       #5CC9C2;
+    --accent-deep:  #8FDBD6;
+    --accent-wash:  rgba(92, 201, 194, .10);
+    --brass:        #D6A650;
+    --brass-deep:   #E9C27A;
+    --brass-wash:   rgba(214, 166, 80, .10);
+    --focus:        #8FDBD6;
+    --shadow:       0 1px 2px rgba(0,0,0,.35), 0 18px 40px -22px rgba(0,0,0,.7);
+    --wing-vein:    rgba(92, 201, 194, .34);
+    --wing-edge:    rgba(214, 166, 80, .55);
+    --wing-stigma:  rgba(214, 166, 80, .28);
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --ground:       #F1F5F3;
+      --ground-deep:  #E6ECE9;
+      --surface:      #FFFFFF;
+      --surface-alt:  #E9EFEC;
+      --ink:          #13232A;
+      --ink-soft:     #4A5D63;
+      --ink-faint:    #74868C;
+      --line:         #CFDAD6;
+      --line-soft:    #DFE7E3;
+      --accent:       #0E6E75;
+      --accent-deep:  #0A5257;
+      --accent-wash:  rgba(14, 110, 117, .09);
+      --brass:        #96641F;
+      --brass-deep:   #7A5017;
+      --brass-wash:   rgba(150, 100, 31, .10);
+      --focus:        #0E6E75;
+      --shadow:       0 1px 2px rgba(16,40,45,.06), 0 18px 40px -22px rgba(16,40,45,.25);
+      --wing-vein:    rgba(14, 110, 117, .30);
+      --wing-edge:    rgba(150, 100, 31, .55);
+      --wing-stigma:  rgba(150, 100, 31, .22);
+    }
+  }
+  :root[data-theme="light"] {
+    --ground:       #F1F5F3;
+    --ground-deep:  #E6ECE9;
+    --surface:      #FFFFFF;
+    --surface-alt:  #E9EFEC;
+    --ink:          #13232A;
+    --ink-soft:     #4A5D63;
+    --ink-faint:    #74868C;
+    --line:         #CFDAD6;
+    --line-soft:    #DFE7E3;
+    --accent:       #0E6E75;
+    --accent-deep:  #0A5257;
+    --accent-wash:  rgba(14, 110, 117, .09);
+    --brass:        #96641F;
+    --brass-deep:   #7A5017;
+    --brass-wash:   rgba(150, 100, 31, .10);
+    --focus:        #0E6E75;
+    --shadow:       0 1px 2px rgba(16,40,45,.06), 0 18px 40px -22px rgba(16,40,45,.25);
+    --wing-vein:    rgba(14, 110, 117, .30);
+    --wing-edge:    rgba(150, 100, 31, .55);
+    --wing-stigma:  rgba(150, 100, 31, .22);
+  }
+
+  /* ---------- Base ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Public Sans", "Segoe UI", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-deep); text-decoration: underline; text-underline-offset: 3px; }
+
+  code, kbd, .mono {
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: .92em;
+  }
+  code { color: var(--accent-deep); }
+
+  h1, h2, h3 { text-wrap: balance; margin: 0; }
+  .display {
+    font-family: "Fraunces", "Iowan Old Style", Georgia, serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 300;
+    letter-spacing: -.01em;
+    line-height: 1.05;
+  }
+  .display em { font-style: italic; font-weight: 300; color: var(--brass); }
+
+  .eyebrow {
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .eyebrow .sep { margin: 0 .5em; color: var(--line); }
+
+  .wrap { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
+  .prose { max-width: 62ch; }
+  p { margin: 0; }
+  .lede { font-size: 19px; color: var(--ink-soft); line-height: 1.55; }
+  .soft { color: var(--ink-soft); }
+
+  section { padding-block: 88px; }
+  section + section { border-top: 1px solid var(--line-soft); }
+  .section-head { display: grid; gap: 14px; margin-bottom: 44px; }
+  .section-head h2 { font-size: clamp(30px, 3.6vw, 40px); }
+
+  /* ---------- Nav ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--ground) 86%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 24px; }
+  .wordmark {
+    font-family: "Fraunces", Georgia, serif;
+    font-variation-settings: "opsz" 40;
+    font-weight: 400;
+    font-size: 22px;
+    color: var(--ink);
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .wordmark:hover { text-decoration: none; color: var(--ink); }
+  .wordmark svg { width: 22px; height: 22px; color: var(--accent); }
+  .nav-links { display: flex; gap: 26px; font-size: 14.5px; font-weight: 500; }
+  .nav-links a { color: var(--ink-soft); }
+  .nav-links a:hover { color: var(--ink); text-decoration: none; }
+  @media (max-width: 640px) { .nav-links { display: none; } }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: 96px 80px;
+    background: linear-gradient(180deg, var(--ground) 0%, var(--ground-deep) 100%);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .hero canvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+  }
+  .hero .wrap { position: relative; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(300px, .9fr);
+    gap: 56px;
+    align-items: end;
+  }
+  @media (max-width: 880px) { .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; } }
+  .hero h1 { font-size: clamp(44px, 6.4vw, 78px); margin-block: 22px 24px; max-width: 12ch; }
+  .hero .lede { max-width: 52ch; }
+
+  .facts {
+    display: flex; flex-wrap: wrap; gap: 8px 28px;
+    margin-top: 34px;
+    font-size: 14px; color: var(--ink-soft);
+  }
+  .facts span::before {
+    content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--brass); margin-right: 10px; vertical-align: 2px;
+  }
+
+  /* Connection card — the one lifted object on the page */
+  .connect {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+    padding: 22px 24px 20px;
+  }
+  .connect .eyebrow { color: var(--brass); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 12px; }
+  .connect .eyebrow .live { color: var(--ink-faint); letter-spacing: .08em; font-weight: 500; }
+  .connect .eyebrow .live::before {
+    content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent); margin-right: 7px; vertical-align: 1px;
+    box-shadow: 0 0 0 3px var(--accent-wash);
+  }
+  .fields { display: grid; margin-top: 14px; }
+  .field {
+    display: grid; grid-template-columns: 84px minmax(0, 1fr) auto; align-items: center; gap: 14px;
+    padding: 11px 0; border-top: 1px solid var(--line-soft);
+  }
+  .field:first-child { border-top: 0; }
+  .field .k { font-size: 12.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-faint); }
+  .field .v { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 17px; font-variant-numeric: tabular-nums; color: var(--ink); overflow-wrap: anywhere; }
+  .field .v.plain { font-family: "Public Sans", system-ui, sans-serif; font-size: 15px; color: var(--ink-soft); }
+  .copy {
+    font: 500 12.5px "Public Sans", system-ui, sans-serif;
+    color: var(--accent); background: transparent;
+    border: 1px solid var(--line); border-radius: 4px;
+    padding: 4px 10px; cursor: pointer; min-width: 64px;
+  }
+  .copy:hover { background: var(--accent-wash); border-color: var(--accent); }
+  .copy[data-done] { color: var(--brass); border-color: var(--brass); }
+  .connect .note { margin-top: 14px; font-size: 13.5px; color: var(--ink-faint); line-height: 1.5; }
+
+  /* ---------- Steps ---------- */
+  .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; }
+  @media (max-width: 880px) { .steps { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
+  .step { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: start; }
+  .step .n {
+    font-family: "Fraunces", Georgia, serif; font-variation-settings: "opsz" 72;
+    font-weight: 300; font-size: 40px; line-height: 1; color: var(--brass);
+    font-variant-numeric: tabular-nums; margin-top: -2px;
+  }
+  .step h3 { font-size: 19px; font-weight: 600; margin-bottom: 8px; line-height: 1.3; }
+  .step p { color: var(--ink-soft); font-size: 15.5px; }
+  .step p + p { margin-top: 8px; }
+  .cmdline {
+    margin-top: 12px; padding: 10px 12px;
+    background: var(--surface-alt); border: 1px solid var(--line-soft); border-radius: 4px;
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12.5px; line-height: 1.5;
+    color: var(--ink); overflow-x: auto; white-space: nowrap;
+  }
+  .cmdline b { font-weight: 500; color: var(--brass); }
+
+  /* ---------- Features ---------- */
+  .features {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--line); border-left: 1px solid var(--line);
+  }
+  @media (max-width: 960px) { .features { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) { .features { grid-template-columns: minmax(0, 1fr); } }
+  .feature {
+    padding: 26px 26px 24px;
+    border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    display: grid; grid-template-rows: auto 1fr auto; gap: 12px;
+  }
+  .feature.lead { background: var(--accent-wash); }
+  .feature h3 {
+    font-family: "Fraunces", Georgia, serif; font-variation-settings: "opsz" 40;
+    font-weight: 400; font-size: 23px; line-height: 1.2;
+  }
+  .feature p { color: var(--ink-soft); font-size: 15px; }
+  .feature .cmds { display: grid; gap: 5px; margin-top: 6px; font-size: 13.5px; }
+  .feature .cmds div { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+  .feature .cmds code { color: var(--accent-deep); white-space: nowrap; }
+  .feature .cmds span { color: var(--ink-faint); }
+
+  /* ---------- Rules ---------- */
+  .rules-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px; align-items: start; }
+  @media (max-width: 880px) { .rules-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; } }
+  .rules { display: grid; }
+  .rule { padding: 20px 0; border-top: 1px solid var(--line-soft); display: grid; gap: 6px; }
+  .rule:last-child { border-bottom: 1px solid var(--line-soft); }
+  .rule h3 {
+    font-family: "Fraunces", Georgia, serif; font-variation-settings: "opsz" 40;
+    font-weight: 400; font-size: 22px;
+  }
+  .rule h3 strong { font-weight: 500; color: var(--brass); }
+  .rule p { color: var(--ink-soft); font-size: 15.5px; }
+  .aside {
+    border-left: 2px solid var(--brass); padding: 4px 0 4px 18px;
+    color: var(--ink-soft); font-size: 15.5px; margin-top: 26px;
+  }
+
+  /* ---------- Chat + audit, two columns ---------- */
+  .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; }
+  @media (max-width: 880px) { .two { grid-template-columns: minmax(0, 1fr); gap: 56px; } }
+  .two h2 { font-size: clamp(26px, 3vw, 32px); margin: 12px 0 18px; }
+  .chan { display: grid; margin-top: 20px; }
+  .chan div { display: grid; grid-template-columns: minmax(120px, 170px) minmax(0, 1fr); gap: 16px; padding: 10px 0; border-top: 1px solid var(--line-soft); font-size: 15px; color: var(--ink-soft); }
+  .chan div:last-child { border-bottom: 1px solid var(--line-soft); }
+  .chan code { color: var(--ink); }
+  .chan .relay { color: var(--brass); font-size: 11.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-left: 8px; }
+  .audit-list { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; color: var(--ink-soft); font-size: 15.5px; }
+  .audit-list li { padding-left: 22px; position: relative; }
+  .audit-list li::before { content: ""; position: absolute; left: 0; top: .62em; width: 10px; height: 1px; background: var(--brass); }
+
+  /* ---------- Troubleshooting ---------- */
+  .faq { display: grid; border-top: 1px solid var(--line-soft); }
+  .faq details { border-bottom: 1px solid var(--line-soft); }
+  .faq summary {
+    cursor: pointer; list-style: none; padding: 18px 0;
+    display: flex; justify-content: space-between; align-items: center; gap: 20px;
+    font-weight: 500; font-size: 17px;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after {
+    content: "+"; font-family: "Fraunces", Georgia, serif; font-weight: 300; font-size: 26px; line-height: 1;
+    color: var(--brass); flex: none; transition: transform .2s ease;
+  }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq details p { color: var(--ink-soft); font-size: 15.5px; padding-bottom: 20px; max-width: 66ch; }
+  @media (prefers-reduced-motion: reduce) { .faq summary::after { transition: none; } }
+
+  /* ---------- Footer ---------- */
+  footer { border-top: 1px solid var(--line); padding-block: 44px 56px; color: var(--ink-faint); font-size: 14px; }
+  footer .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: start; }
+  @media (max-width: 720px) { footer .wrap { grid-template-columns: minmax(0, 1fr); } }
+  footer p { max-width: 60ch; line-height: 1.6; }
+  footer .mono { color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="wordmark" href="#top" aria-label="Aeshnidae, home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
+        <path d="M12 3v18"/>
+        <path d="M12 8c-3-4-8-4-10-2 2 3 6 4 10 2Zm0 0c3-4 8-4 10-2-2 3-6 4-10 2Z"/>
+        <path d="M12 12c-3-3-7-3-9-1.5 2 2.5 5.5 3 9 1.5Zm0 0c3-3 7-3 9-1.5-2 2.5-5.5 3-9 1.5Z"/>
+      </svg>
+      Aeshnidae
+    </a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#join">Join</a>
+      <a href="#different">What's different</a>
+      <a href="#rules">House rules</a>
+      <a href="#help">Help</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ================= HERO ================= -->
+<section class="hero" aria-labelledby="hero-title">
+  <canvas id="wing" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Asheron's Call<span class="sep">·</span>Private server<span class="sep">·</span>Online around the clock</p>
+        <h1 id="hero-title" class="display">Dereth, with an economy that <em>holds.</em></h1>
+        <p class="lede">A private Asheron's Call world where experience is the currency, the bank is shared across your account, and one person can't quietly play as six. No sign-up, nothing to install beyond the game — point your client at the server and it makes your account the first time you connect.</p>
+        <div class="facts" aria-label="Key facts">
+          <span>Level cap 500</span>
+          <span>Skills past the retail cap</span>
+          <span>No portal level requirements</span>
+          <span>Backed up every 30 minutes</span>
+        </div>
+      </div>
+
+      <aside class="connect" aria-labelledby="connect-title">
+        <p class="eyebrow" id="connect-title">Connect <span class="live">Montreal · always on</span></p>
+        <div class="fields">
+          <div class="field">
+            <span class="k">Address</span>
+            <span class="v">144.217.84.148</span>
+            <button class="copy" type="button" data-copy="144.217.84.148">Copy</button>
+          </div>
+          <div class="field">
+            <span class="k">Port</span>
+            <span class="v">9020</span>
+            <button class="copy" type="button" data-copy="9020">Copy</button>
+          </div>
+          <div class="field">
+            <span class="k">World</span>
+            <span class="v">Aeshnidae</span>
+            <button class="copy" type="button" data-copy="Aeshnidae">Copy</button>
+          </div>
+          <div class="field">
+            <span class="k">Account</span>
+            <span class="v plain">Any name and password — created on first login</span>
+            <span></span>
+          </div>
+        </div>
+        <p class="note">There's no "forgot password". Pick something you use nowhere else, and type it the same way every time.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ================= JOIN ================= -->
+<section id="join" aria-labelledby="join-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Five minutes, start to Dereth</p>
+      <h2 id="join-title" class="display">Joining</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="n" aria-hidden="true">1</span>
+        <div>
+          <h3>Get a client</h3>
+          <p>You need a Windows PC and an Asheron's Call client. Ask Tom about the client before you go hunting for one — he'll point you at the right setup, including the launcher that keeps this server's data files separate from any other server you play.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="n" aria-hidden="true">2</span>
+        <div>
+          <h3>Point it at the server</h3>
+          <p>In a launcher (AeshLauncher, ThwargLauncher or similar), add a server with the address and port above. Launching the game directly is a command line:</p>
+          <div class="cmdline">acclient.exe -h 144.217.84.148:9020 -a <b>YOURNAME</b> -v <b>YOURPASSWORD</b> -rodat off</div>
+        </div>
+      </div>
+      <div class="step">
+        <span class="n" aria-hidden="true">3</span>
+        <div>
+          <h3>Roll a character</h3>
+          <p>The first login with a new name and password creates that account. You'll land on an empty character screen — make one and you're in.</p>
+          <p>Every session after that: just launch the game. Nobody to text, nothing to start first.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHAT'S DIFFERENT ================= -->
+<section id="different" aria-labelledby="different-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Not stock Asheron's Call</p>
+      <h2 id="different-title" class="display">What's different here</h2>
+      <p class="lede prose">The changes you'll actually notice, each with the command that goes with it. Type <code>/help</code> in game for the rest.</p>
+    </div>
+
+    <div class="features">
+      <article class="feature lead">
+        <h3>Experience is the currency</h3>
+        <p>Unassigned experience can be sent to another player, which makes it the server's real trading money. Prices are quoted in it; deals settle in it.</p>
+        <div class="cmds">
+          <div><code>/xp</code><span>what you're holding</span></div>
+          <div><code>/xpsend Frigid 2.5b</code><span>send 2.5 billion to Frigid</span></div>
+        </div>
+      </article>
+
+      <article class="feature">
+        <h3>A shared bank</h3>
+        <p>Pyreals, luminance and keys live in an account-wide vault instead of your pack. Every character you own draws on the same balance.</p>
+        <div class="cmds">
+          <div><code>/bank</code> <code>/b</code><span>balances, deposits, withdrawals</span></div>
+        </div>
+      </article>
+
+      <article class="feature">
+        <h3>Skill mastery</h3>
+        <p>Skills keep going past the retail cap. Ranks are bought with unassigned experience and survive enlightenment — the part of a character that accumulates for good.</p>
+        <div class="cmds">
+          <div><code>/mastery</code><span>what you have, and the next rank's cost</span></div>
+          <div><code>/raise &lt;skill&gt; [ranks]</code><span>buy ranks</span></div>
+          <div><code>/check &lt;skill&gt;</code><span>where every point comes from</span></div>
+        </div>
+      </article>
+
+      <article class="feature">
+        <h3>Level cap 500</h3>
+        <p>Levelling continues well past retail on the retail curve, with an extra skill credit every 25 levels beyond 275.</p>
+        <div class="cmds">
+          <div><code>/maxlevel</code><span>the cap and what the next levels cost</span></div>
+        </div>
+      </article>
+
+      <article class="feature">
+        <h3>Enlightenment, on our terms</h3>
+        <p>Reset at 275, +1 each time, uncapped. You keep your society, your auras and your unspent experience. Done through the NPC.</p>
+        <div class="cmds">
+          <div><code>/enlighten</code><span>your progress and what it would cost</span></div>
+        </div>
+      </article>
+
+      <article class="feature">
+        <h3>Quest bonus</h3>
+        <p>Every quest you complete raises a standing experience bonus that applies from then on. The world is worth exploring twice.</p>
+        <div class="cmds">
+          <div><code>/qb</code><span>your bonus</span></div>
+          <div><code>/qb list</code><span>the breakdown</span></div>
+        </div>
+      </article>
+
+      <article class="feature">
+        <h3>Every portal is open</h3>
+        <p>Portal level requirements are gone — no minimums, no maximums. Go where you like; whether you survive there is another matter. Housing is untouched.</p>
+        <div class="cmds">
+          <div><code>/portalaccess</code><span>the details</span></div>
+        </div>
+      </article>
+
+      <article class="feature">
+        <h3>Reworked fellowship sharing</h3>
+        <p>Experience splits across a fellowship on a different curve from retail, so bringing friends along isn't a tax on the one doing the work.</p>
+        <div class="cmds">
+          <div><code>/fellow</code><span>the curve, and where your group sits on it</span></div>
+        </div>
+      </article>
+
+      <article class="feature">
+        <h3>Know what you earn</h3>
+        <p>Session totals, hourly rate and rolling windows — for working out whether a given dungeon is worth your evening.</p>
+        <div class="cmds">
+          <div><code>/earned</code><span>your rate</span></div>
+          <div><code>/instance</code><span>which copy of a dungeon you're in</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOUSE RULES ================= -->
+<section id="rules" aria-labelledby="rules-title">
+  <div class="wrap">
+    <div class="rules-grid">
+      <div>
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow">Enforced by the server itself</p>
+          <h2 id="rules-title" class="display">House rules</h2>
+          <p class="lede">A real economy only works if one person can't quietly play as six. These limits are counted per internet connection, not per account, and the server applies them on its own — so they're worth knowing before you bump into one and think something's broken.</p>
+        </div>
+        <p class="aside">Share a house with another player? Tell Tom and he can lift the limits for your address.</p>
+      </div>
+      <div class="rules">
+        <div class="rule">
+          <h3><strong>Two</strong> characters online at once</h3>
+          <p>Make as many characters and accounts as you like — there's no cap on either. Only two can be logged in at the same time. A third login drops the newest, saved properly on the way out.</p>
+        </div>
+        <div class="rule">
+          <h3><strong>One</strong> of them outside the Marketplace</h3>
+          <p>The second can come along, but it stays in the Marketplace. Walk it out and it's sent straight back. Whichever character leaves first is the one that stays out.</p>
+        </div>
+        <div class="rule">
+          <h3><strong>Three</strong> accounts per connection</h3>
+          <p>Enough for a household sharing a router; not enough to run a farm.</p>
+        </div>
+        <div class="rule">
+          <h3><strong>No</strong> swearing allegiance to yourself</h3>
+          <p>Passing your own experience up through a second character of your own isn't allowed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CHAT + AUDIT ================= -->
+<section id="community" aria-labelledby="chat-title">
+  <div class="wrap two">
+    <div>
+      <p class="eyebrow">Chat</p>
+      <h2 id="chat-title" class="display">Heard in Discord too</h2>
+      <p class="prose soft">General and Trade are relayed to the Aeshnidae Discord, so an offer is seen by people who aren't logged in. Only those two channels — tells, allegiance and fellowship chat stay in the game. The bridge is one-way: Discord reads the game, but nothing typed there reaches it.</p>
+      <div class="chan">
+        <div><span><code>/general</code><span class="relay">Relayed</span></span><span>Server-wide chat</span></div>
+        <div><span><code>/trade</code><span class="relay">Relayed</span></span><span>Buying, selling, looking-for</span></div>
+        <div><span><code>@tell &lt;name&gt;</code></span><span>A private message. Not relayed.</span></div>
+        <div><span><code>@who</code></span><span>Who else is online right now</span></div>
+      </div>
+    </div>
+    <div>
+      <p class="eyebrow">Staff accountability</p>
+      <h2 class="display">The staff are audited too</h2>
+      <p class="prose soft">An economy built on tradeable experience only holds if nobody can quietly mint it. So the server audits its own staff, not just its players.</p>
+      <ul class="audit-list">
+        <li>Every admin action that could create value is recorded — items created or deleted, objects given to players, bank transfers, and any grant of experience or luminance.</li>
+        <li>Records go to an append-only log and are posted live to a Discord channel as they happen, so they can't be edited after the fact.</li>
+        <li>Staff are exempt from the two-character limit and nothing else. Every audit applies to them exactly as it does to you.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HELP ================= -->
+<section id="help" aria-labelledby="help-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Before you message Tom</p>
+      <h2 id="help-title" class="display">If something goes wrong</h2>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>The game can't find the server</summary>
+        <p>Check the address and port are exactly <span class="mono">144.217.84.148</span> and <span class="mono">9020</span>. A stale entry from the old setup is the usual culprit — the server used to be on a <span class="mono">100.x</span> address and that one is dead. If the numbers are right, open a command prompt and run <span class="mono">ping 144.217.84.148</span>. A reply means the server is reachable and the problem is in your client's settings.</p>
+      </details>
+      <details>
+        <summary>Ping replies but the game still won't join</summary>
+        <p>The server process may be down or restarting for an update. Give it two minutes, then message Tom — there's nothing to fix on your end.</p>
+      </details>
+      <details>
+        <summary>It rejected my login right after I logged out</summary>
+        <p>Normal. The server holds your session open for about a minute after you disconnect. Wait sixty seconds and try again.</p>
+      </details>
+      <details>
+        <summary>My character got teleported to the Marketplace</summary>
+        <p>Working as intended — you already have another character outside it. Log that one out and this one is free to leave.</p>
+      </details>
+      <details>
+        <summary>I got logged out when my third character came on</summary>
+        <p>Also intended. Two at a time. The newest login is the one dropped, and the character is saved on the way out — nothing is lost.</p>
+      </details>
+      <details>
+        <summary>It won't create my new account</summary>
+        <p>Three accounts per connection is the limit. Log in with one you already have, or ask Tom if you have a real reason for a fourth.</p>
+      </details>
+      <details>
+        <summary>I mistyped my password and made a second account</summary>
+        <p>Easily done, since any new username creates an account. Log in again with the spelling you meant — but the stray one counts toward your three, so ask Tom to clear it.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Aeshnidae runs on ACEmulator with its own set of server mods, hosted on a dedicated server in Montreal. Only the game ports are open to the internet. Player data is saved continuously, backed up every half hour, and copies are kept off the server.</p>
+    <p class="mono">144.217.84.148:9020</p>
+  </div>
+</footer>
+
+<script>
+  /* ---------- Copy buttons ---------- */
+  document.querySelectorAll(".copy").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var text = btn.getAttribute("data-copy");
+      var done = function () {
+        btn.textContent = "Copied";
+        btn.setAttribute("data-done", "1");
+        setTimeout(function () { btn.textContent = "Copy"; btn.removeAttribute("data-done"); }, 1400);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, done);
+      } else {
+        var ta = document.createElement("textarea");
+        ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand("copy"); } catch (e) {}
+        document.body.removeChild(ta); done();
+      }
+    });
+  });
+
+  /* ---------- Dragonfly wing: generated venation ----------
+     Aeshnidae are the hawker dragonflies. Their wings are a network of cells
+     bounded by veins, denser toward the leading edge, with a dark pterostigma
+     near the tip. Here: points scattered inside a wing outline with that
+     density bias, joined by a Gabriel graph (an edge survives only if no
+     third point falls inside the circle it spans), which reads as cells. */
+  (function () {
+    var canvas = document.getElementById("wing");
+    var hero = canvas.parentElement;
+    var ctx = canvas.getContext("2d");
+    var reduceMQ = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var seed = 20260911;
+    function rnd() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
+
+    function bez(p0, p1, p2, p3, t) {
+      var u = 1 - t;
+      return [u*u*u*p0[0] + 3*u*u*t*p1[0] + 3*u*t*t*p2[0] + t*t*t*p3[0],
+              u*u*u*p0[1] + 3*u*u*t*p1[1] + 3*u*t*t*p2[1] + t*t*t*p3[1]];
+    }
+    // Wing outline: root at origin, extends +x. Leading edge nearly straight,
+    // trailing edge fuller; hindwings are broader at the root than forewings.
+    function leadingEdge(len, rootW, maxW) {
+      return [[0, -rootW*0.35], [len*0.30, -rootW*0.55], [len*0.70, -maxW*0.50], [len, -maxW*0.12]];
+    }
+    function outline(len, rootW, maxW) {
+      var segs = [
+        leadingEdge(len, rootW, maxW),
+        [[len, -maxW*0.12], [len*1.04, maxW*0.10], [len*0.99, maxW*0.38], [len*0.90, maxW*0.46]],
+        [[len*0.90, maxW*0.46], [len*0.58, maxW*0.78], [len*0.22, maxW*0.62], [0, rootW*0.65]]
+      ];
+      var pts = [];
+      segs.forEach(function (s) { for (var i = 0; i < 70; i++) pts.push(bez(s[0], s[1], s[2], s[3], i / 70)); });
+      return pts;
+    }
+    function inside(poly, x, y) {
+      var c = false;
+      for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+        var xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
+        if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c;
+      }
+      return c;
+    }
+    function buildWing(len, rootW, maxW, count) {
+      var poly = outline(len, rootW, maxW);
+      var minX = 0, maxX = len*1.05, minY = -maxW*0.6, maxY = maxW*0.8;
+      var pts = [];
+      // boundary points, so cells close against the edge
+      for (var b = 0; b < poly.length; b += 4) pts.push(poly[b]);
+      var tries = 0, base = len / 34;
+      while (pts.length < count && tries++ < 40000) {
+        var x = minX + rnd() * (maxX - minX), y = minY + rnd() * (maxY - minY);
+        if (!inside(poly, x, y)) continue;
+        var t = (y - minY) / (maxY - minY);          // 0 = leading edge
+        var tip = x / len;                            // 0 = root
+        if (rnd() > 0.35 + 0.65 * (1 - t) * (0.6 + 0.4 * tip)) continue;
+        var r = base * (0.55 + 0.75 * t) * (1.1 - 0.35 * tip), ok = true;
+        for (var k = 0; k < pts.length; k++) {
+          var dx = pts[k][0] - x, dy = pts[k][1] - y;
+          if (dx*dx + dy*dy < r*r) { ok = false; break; }
+        }
+        if (ok) pts.push([x, y]);
+      }
+      // Gabriel graph
+      var edges = [], n = pts.length, maxEdge = len * 0.09;
+      for (var i = 0; i < n; i++) for (var j = i + 1; j < n; j++) {
+        var ex = pts[i][0] - pts[j][0], ey = pts[i][1] - pts[j][1];
+        var r2 = (ex*ex + ey*ey) / 4;
+        if (r2 > maxEdge * maxEdge) continue;        // long edges never survive; skip early
+        var mx = (pts[i][0] + pts[j][0]) / 2, my = (pts[i][1] + pts[j][1]) / 2, clear = true;
+        for (var k2 = 0; k2 < n; k2++) {
+          if (k2 === i || k2 === j) continue;
+          var qx = pts[k2][0] - mx, qy = pts[k2][1] - my;
+          if (qx*qx + qy*qy < r2 - 1e-6) { clear = false; break; }
+        }
+        if (clear) edges.push([pts[i], pts[j], Math.hypot(mx, my)]);
+      }
+      edges.sort(function (a, b) { return a[2] - b[2]; });
+      // pterostigma: a small dark cell on the leading edge near the tip
+      var le = leadingEdge(len, rootW, maxW);
+      var a = bez(le[0], le[1], le[2], le[3], 0.74), c = bez(le[0], le[1], le[2], le[3], 0.84);
+      var stigma = [a, c, [c[0] - len*0.01, c[1] + maxW*0.10], [a[0] - len*0.01, a[1] + maxW*0.09]];
+      return { poly: poly, edges: edges, stigma: stigma };
+    }
+
+    var wings = [], W = 0, H = 0, dpr = 1, start = 0, raf = 0, instant = false;
+    function layout() {
+      seed = 20260911;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = hero.clientWidth; H = hero.clientHeight;
+      canvas.width = W * dpr; canvas.height = H * dpr;
+      var scale = Math.max(0.9, Math.min(1.5, W / 1100));
+      var narrow = W < 880;
+      var rootX = W * (narrow ? 0.25 : 0.47), rootY = H * (narrow ? 0.08 : 0.40);
+      wings = [
+        { w: buildWing(640, 70, 150, 240), x: rootX, y: rootY, rot: -0.42, s: scale },
+        { w: buildWing(600, 130, 180, 250), x: rootX, y: rootY + 14 * scale, rot: -0.12, s: scale }
+      ];
+      start = 0;
+      cancelAnimationFrame(raf);
+      paint(1);                     // resting state, synchronously — thumbnails and no-rAF viewers get the wing
+      if (!(instant || reduceMQ.matches)) raf = requestAnimationFrame(frame);
+    }
+    function colors() {
+      var cs = getComputedStyle(document.documentElement);
+      return { vein: cs.getPropertyValue("--wing-vein").trim(), edge: cs.getPropertyValue("--wing-edge").trim(), stigma: cs.getPropertyValue("--wing-stigma").trim() };
+    }
+    function frame(ts) {
+      if (!start) start = ts;
+      var t = Math.min(1, (ts - start) / 2600);
+      paint(1 - Math.pow(1 - t, 3));
+      if (t < 1) raf = requestAnimationFrame(frame);
+    }
+    function paint(e) {
+      var col = colors();
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      wings.forEach(function (wg) {
+        ctx.save();
+        ctx.translate(wg.x, wg.y); ctx.rotate(wg.rot); ctx.scale(wg.s, wg.s);
+        var n = Math.floor(wg.w.edges.length * e);
+        ctx.beginPath();
+        for (var i = 0; i < n; i++) { var ed = wg.w.edges[i]; ctx.moveTo(ed[0][0], ed[0][1]); ctx.lineTo(ed[1][0], ed[1][1]); }
+        ctx.strokeStyle = col.vein; ctx.lineWidth = 0.7 / wg.s; ctx.stroke();
+        // outline, drawn to the same reveal fraction along its length
+        var m = Math.floor(wg.w.poly.length * e);
+        ctx.beginPath();
+        for (var p = 0; p < m; p++) { var q = wg.w.poly[p]; if (p === 0) ctx.moveTo(q[0], q[1]); else ctx.lineTo(q[0], q[1]); }
+        if (e >= 1) ctx.closePath();
+        ctx.strokeStyle = col.edge; ctx.lineWidth = 1.1 / wg.s; ctx.stroke();
+        if (e > 0.85) {
+          ctx.globalAlpha = (e - 0.85) / 0.15;
+          ctx.beginPath(); var st = wg.w.stigma;
+          ctx.moveTo(st[0][0], st[0][1]); for (var s = 1; s < st.length; s++) ctx.lineTo(st[s][0], st[s][1]); ctx.closePath();
+          ctx.fillStyle = col.stigma; ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+        ctx.restore();
+      });
+    }
+    var resizeTimer;
+    window.addEventListener("resize", function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () { instant = true; layout(); }, 150);
+    });
+    // theme flips: repaint in the new colours without replaying the draw-in
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { cancelAnimationFrame(raf); paint(1); });
+    layout();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (Math.abs(hero.clientHeight - H) > 2) { instant = true; layout(); } });
+  })();
+</script>
+</body>
+</html>
