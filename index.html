@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Aeshnidae is a private Asheron's Call server: experience as currency, a shared account bank, skills past the retail cap, and house rules the server enforces itself. Connect at 144.217.84.148:9020.">
+<meta name="description" content="Aeshnidae is a private Asheron's Call server: Radiance and Resonance earned by playing, a shared account bank, skills past the retail cap, and house rules the server enforces itself. Connect at 144.217.84.148:9020.">
 <meta property="og:title" content="Aeshnidae">
 <meta property="og:description" content="A private Asheron's Call world with an economy that holds. Online around the clock.">
 <meta property="og:type" content="website">
@@ -274,6 +274,7 @@
     font-weight: 400; font-size: 23px; line-height: 1.2;
   }
   .feature p { color: var(--ink-soft); font-size: 15px; }
+  .feature p strong { color: var(--ink); font-weight: 600; }
   .feature .cmds { display: grid; gap: 5px; margin-top: 6px; font-size: 13.5px; }
   .feature .cmds div { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
   .feature .cmds code { color: var(--accent-deep); white-space: nowrap; }
@@ -365,8 +366,9 @@
       <div>
         <p class="eyebrow">Asheron's Call<span class="sep">·</span>Private server<span class="sep">·</span>Online around the clock</p>
         <h1 id="hero-title" class="display">Dereth, with an economy that <em>holds.</em></h1>
-        <p class="lede">A private Asheron's Call world where experience is the currency, the bank is shared across your account, and one person can't quietly play as six. No sign-up, nothing to install beyond the game — point your client at the server and it makes your account the first time you connect.</p>
+        <p class="lede">A private Asheron's Call world with two currencies you earn by playing — Radiance from kills, Resonance from quests — a bank shared across your account, and house rules that stop one person quietly playing as six. No sign-up, nothing to install beyond the game: point your client at the server and it makes your account the first time you connect.</p>
         <div class="facts" aria-label="Key facts">
+          <span>Radiance from kills, Resonance from quests</span>
           <span>Level cap 500</span>
           <span>Skills past the retail cap</span>
           <span>No portal level requirements</span>
@@ -450,25 +452,27 @@
 
     <div class="features">
       <article class="feature lead">
-        <h3>Experience is the currency</h3>
-        <p>Unassigned experience can be sent to another player, which makes it the server's real trading money. Prices are quoted in it; deals settle in it.</p>
+        <h3>Two currencies, earned by playing</h3>
+        <p><strong>Radiance</strong> comes from monster kills — scaled by what the monster is worth and your share of the damage, and announced in chat as it lands. <strong>Resonance</strong> comes from completing quests, repeatables included. Neither is an item you carry: both go straight into your account's balance and change hands through the bank.</p>
         <div class="cmds">
-          <div><code>/xp</code><span>what you're holding</span></div>
-          <div><code>/xpsend Frigid 2.5b</code><span>send 2.5 billion to Frigid</span></div>
+          <div><code>/bank pay Aeshna radiance 5000</code><span>send 5,000 Radiance to Aeshna</span></div>
+          <div><code>/bank pay Aeshna res 200</code><span>the short forms work too</span></div>
         </div>
       </article>
 
       <article class="feature">
         <h3>A shared bank</h3>
-        <p>Pyreals, luminance and keys live in an account-wide vault instead of your pack. Every character you own draws on the same balance.</p>
+        <p>One vault for the whole account: Radiance and Resonance, plus pyreals, luminance and keys you deposit from your pack. Every character you own draws on the same balance, so there's no shuffling between them.</p>
         <div class="cmds">
-          <div><code>/bank</code> <code>/b</code><span>balances, deposits, withdrawals</span></div>
+          <div><code>/bank</code> <code>/b</code><span>balances</span></div>
+          <div><code>/b d lk 50</code><span>deposit 50 Legendary Key uses</span></div>
+          <div><code>/b w p all</code><span>withdraw every banked pyreal</span></div>
         </div>
       </article>
 
       <article class="feature">
         <h3>Skill mastery</h3>
-        <p>Skills keep going past the retail cap. Ranks are bought with unassigned experience and survive enlightenment — the part of a character that accumulates for good.</p>
+        <p>Skills keep going past the retail cap. Ranks are paid for with your own unassigned experience and survive enlightenment — the part of a character that accumulates for good.</p>
         <div class="cmds">
           <div><code>/mastery</code><span>what you have, and the next rank's cost</span></div>
           <div><code>/raise &lt;skill&gt; [ranks]</code><span>buy ranks</span></div>
@@ -519,10 +523,10 @@
 
       <article class="feature">
         <h3>Know what you earn</h3>
-        <p>Session totals, hourly rate and rolling windows — for working out whether a given dungeon is worth your evening.</p>
+        <p>Radiance and Resonance over the last 5, 10, 30 and 60 minutes, the session total and an hourly rate — for working out whether a given dungeon is worth your evening. Kills and quests only; what other players send you doesn't count.</p>
         <div class="cmds">
           <div><code>/earned</code><span>your rate</span></div>
-          <div><code>/instance</code><span>which copy of a dungeon you're in</span></div>
+          <div><code>/earned reset</code><span>start the session clock over</span></div>
         </div>
       </article>
     </div>
@@ -537,7 +541,7 @@
         <div class="section-head" style="margin-bottom:0">
           <p class="eyebrow">Enforced by the server itself</p>
           <h2 id="rules-title" class="display">House rules</h2>
-          <p class="lede">A real economy only works if one person can't quietly play as six. These limits are counted per internet connection, not per account, and the server applies them on its own — so they're worth knowing before you bump into one and think something's broken.</p>
+          <p class="lede">Currency that's earned by playing only means something if one person can't quietly play as six. These limits are counted per internet connection, not per account, and the server applies them on its own — so they're worth knowing before you bump into one and think something's broken.</p>
         </div>
         <p class="aside">Share a house with another player? Tell Tom and he can lift the limits for your address.</p>
       </div>
@@ -572,7 +576,7 @@
       <p class="prose soft">General and Trade are relayed to the Aeshnidae Discord, so an offer is seen by people who aren't logged in. Only those two channels — tells, allegiance and fellowship chat stay in the game. The bridge is one-way: Discord reads the game, but nothing typed there reaches it.</p>
       <div class="chan">
         <div><span><code>/general</code><span class="relay">Relayed</span></span><span>Server-wide chat</span></div>
-        <div><span><code>/trade</code><span class="relay">Relayed</span></span><span>Buying, selling, looking-for</span></div>
+        <div><span><code>/trade</code><span class="relay">Relayed</span></span><span>Buying, selling, looking-for — priced in Radiance and Resonance</span></div>
         <div><span><code>@tell &lt;name&gt;</code></span><span>A private message. Not relayed.</span></div>
         <div><span><code>@who</code></span><span>Who else is online right now</span></div>
       </div>
@@ -580,9 +584,9 @@
     <div>
       <p class="eyebrow">Staff accountability</p>
       <h2 class="display">The staff are audited too</h2>
-      <p class="prose soft">An economy built on tradeable experience only holds if nobody can quietly mint it. So the server audits its own staff, not just its players.</p>
+      <p class="prose soft">An economy built on earned currency only holds if nobody can quietly mint it. So the server audits its own staff, not just its players.</p>
       <ul class="audit-list">
-        <li>Every admin action that could create value is recorded — items created or deleted, objects given to players, bank transfers, and any grant of experience or luminance.</li>
+        <li>Every admin action that could create value is recorded — items created or deleted, objects given to players, bank balances adjusted, and any grant of experience or luminance.</li>
         <li>Records go to an append-only log and are posted live to a Discord channel as they happen, so they can't be edited after the fact.</li>
         <li>Staff are exempt from the two-character limit and nothing else. Every audit applies to them exactly as it does to you.</li>
       </ul>
