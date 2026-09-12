@@ -134,17 +134,17 @@ modified variant of the same dungeon live at the same time.
 
 ---
 
-## Skills — `/c`, `/raise`, `/check` [Player]
+## Skills — `/x`, `/raise`, `/check` [Player]
 
 ```
-/c <skill>                      what the next +1, +5, +10 cost, and how many points you can afford
+/x <skill>                      what the next +1, +5, +10 cost, and how many points you can afford
 /cost <skill>                   the same
 /raise <skill> [n]              buy n mastery points
 /mastery                        every skill you hold mastery in
 /check <skill>                  what a skill actually works out to, and where each part comes from
 ```
 
-Skill names with spaces work as-is: `/c melee defense`.
+Skill names with spaces work as-is: `/x melee defense`. (`/c` and `/m` are chat channels in the client, so it never sends them to the server.)
 
 `/check` shows attributes, retail ranks, mastery, augmentations, buffs, and then the
 combat layer — weapon, burden, stance, armour imbues — with the effective figure taken
