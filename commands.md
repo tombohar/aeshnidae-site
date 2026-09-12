@@ -137,10 +137,10 @@ modified variant of the same dungeon live at the same time.
 ## Skills — `/x`, `/raise`, `/check` [Player]
 
 ```
-/x <skill>                      what the next raise, the next whole point and the one after cost; how many raises you can afford
+/x <skill>                      what the next +1, +5, +10 cost, and how many points you can afford
 /cost <skill>                   the same
-/raise <skill> [n]              buy n raises - each raise is a tenth of a mastery point
-/mastery                        every skill you hold mastery in, in tenths
+/raise <skill> [n]              buy n mastery points - one raise is one point
+/mastery                        every skill you hold mastery in
 /check <skill>                  what a skill actually works out to, and where each part comes from
 ```
 
@@ -151,12 +151,11 @@ combat layer — weapon, burden, stance, armour imbues — with the effective fi
 from ACE's own calculation rather than recomputed.
 
 Mastery is paid for in **Radiance** from the account bank, priced along the retail
-skill curve continued: the first mastery point costs what rank 209 would have, and each
-point after is 1.0787x the one before (the retail table's own tail multiplier). A point
-is bought in **ten raises**, each a tenth of the point's price, so a raise is affordable
-from a modest bank and the total for a point is exactly the curve's. Only whole points
-land on the skill: 3.7 shows as +3 until the eighth, ninth and tenth raise. Roughly: +30
-in a skill totals ~34B Radiance, +50 ~168B (about one whole climb to level 275), so the
+skill curve continued at **ten times the weight**: the first mastery point costs ten
+times what rank 209 would have (3.31B trained, 3.78B specialized), and each point after
+is 1.0787x the one before (the retail table's own tail multiplier). One raise is one
+whole point. Roughly, against a full climb from 1 to 275 (~191B): +10 totals 48B (a
+quarter of a climb), +30 366B (two climbs), +50 1.8T (nine and a half), +100 82T. The
 curve is its own ceiling.
 
 Mastery survives enlightenment. Retail ranks do not.
