@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Every command the Aeshnidae server's mods add, straight from the server's own reference.">
+<meta name="theme-color" content="#0B1416" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F1F5F3" media="(prefers-color-scheme: light)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235CC9C2' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M12 3v18'/%3E%3Cpath d='M12 8c-3-4-8-4-10-2 2 3 6 4 10 2Zm0 0c3-4 8-4 10-2-2 3-6 4-10 2Z'/%3E%3Cpath d='M12 12c-3-3-7-3-9-1.5 2 2.5 5.5 3 9 1.5Zm0 0c3-3 7-3 9-1.5-2 2.5-5.5 3-9 1.5Z'/%3E%3C/svg%3E">
+<title>Aeshnidae Commands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+
+<style>
+  :root {
+    color-scheme: dark light;
+    --ground: #0B1416; --surface: #132126; --surface-alt: #192B31;
+    --ink: #E7EEEC; --ink-soft: #A7B9BA; --ink-faint: #77898C;
+    --line: #26393E; --line-soft: #1B2C31;
+    --accent: #5CC9C2; --accent-deep: #8FDBD6; --accent-wash: rgba(92,201,194,.10);
+    --brass: #D6A650; --brass-wash: rgba(214,166,80,.10);
+    --focus: #8FDBD6;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --ground: #F1F5F3; --surface: #FFFFFF; --surface-alt: #E9EFEC;
+      --ink: #13232A; --ink-soft: #4A5D63; --ink-faint: #74868C;
+      --line: #CFDAD6; --line-soft: #DFE7E3;
+      --accent: #0E6E75; --accent-deep: #0A5257; --accent-wash: rgba(14,110,117,.09);
+      --brass: #96641F; --brass-wash: rgba(150,100,31,.10);
+      --focus: #0E6E75;
+    }
+  }
+  :root[data-theme="light"] {
+    --ground: #F1F5F3; --surface: #FFFFFF; --surface-alt: #E9EFEC;
+    --ink: #13232A; --ink-soft: #4A5D63; --ink-faint: #74868C;
+    --line: #CFDAD6; --line-soft: #DFE7E3;
+    --accent: #0E6E75; --accent-deep: #0A5257; --accent-wash: rgba(14,110,117,.09);
+    --brass: #96641F; --brass-wash: rgba(150,100,31,.10);
+    --focus: #0E6E75;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: "Public Sans", "Segoe UI", system-ui, sans-serif;
+    font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-deep); text-decoration: underline; text-underline-offset: 3px; }
+  .wrap { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
+  .eyebrow { font-size: 12.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); }
+
+  /* nav, identical to the front page */
+  .nav { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--ground) 86%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line-soft); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 24px; }
+  .wordmark { font-family: "Fraunces", Georgia, serif; font-variation-settings: "opsz" 40; font-weight: 400; font-size: 22px; color: var(--ink); display: inline-flex; align-items: center; gap: 10px; }
+  .wordmark:hover { text-decoration: none; color: var(--ink); }
+  .wordmark svg { width: 22px; height: 22px; color: var(--accent); }
+  .nav-links { display: flex; gap: 26px; font-size: 14.5px; font-weight: 500; }
+  .nav-links a { color: var(--ink-soft); }
+  .nav-links a:hover, .nav-links a[aria-current] { color: var(--ink); text-decoration: none; }
+  @media (max-width: 640px) { .nav-links { display: none; } }
+
+  /* page head */
+  .head { padding-block: 64px 28px; border-bottom: 1px solid var(--line-soft); }
+  .head .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px 40px; align-items: end; }
+  @media (max-width: 720px) { .head .wrap { grid-template-columns: minmax(0, 1fr); } }
+  h1 { font-family: "Fraunces", Georgia, serif; font-variation-settings: "opsz" 144; font-weight: 300; font-size: clamp(38px, 5vw, 56px); line-height: 1.05; margin: 14px 0 12px; letter-spacing: -.01em; text-wrap: balance; }
+  .head p { margin: 0; color: var(--ink-soft); max-width: 60ch; }
+  .head .meta { font-size: 13.5px; color: var(--ink-faint); margin-top: 10px; font-variant-numeric: tabular-nums; }
+
+  .toggle { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: var(--ink-soft); cursor: pointer; user-select: none; padding: 8px 12px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
+  .toggle input { accent-color: var(--brass); width: 16px; height: 16px; margin: 0; }
+  .toggle:has(input:checked) { border-color: var(--brass); color: var(--ink); background: var(--brass-wash); }
+
+  /* layout: sticky section index beside the document */
+  .body { padding-block: 40px 96px; }
+  .body .wrap { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 56px; align-items: start; }
+  @media (max-width: 880px) { .body .wrap { grid-template-columns: minmax(0, 1fr); } .toc { display: none; } }
+  .toc { position: sticky; top: 84px; font-size: 14px; display: grid; gap: 2px; }
+  .toc a { color: var(--ink-soft); padding: 5px 0 5px 12px; border-left: 2px solid var(--line-soft); line-height: 1.35; }
+  .toc a:hover { color: var(--ink); text-decoration: none; border-left-color: var(--accent); }
+  .toc a.staff { color: var(--ink-faint); }
+  .toc a.staff::after { content: "staff"; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--brass); margin-left: 8px; }
+
+  /* the rendered document */
+  .md { max-width: 74ch; }
+  .md > h1 { display: none; }                      /* the page has its own title */
+  .md h2 { font-family: "Fraunces", Georgia, serif; font-variation-settings: "opsz" 40; font-weight: 400; font-size: 28px; line-height: 1.15; margin: 56px 0 14px; padding-top: 8px; letter-spacing: -.005em; text-wrap: balance; }
+  .md h2:first-of-type { margin-top: 8px; }
+  .md h3 { font-size: 17px; font-weight: 600; margin: 32px 0 10px; }
+  .md h2 .tag, .md h3 .tag { display: inline-block; vertical-align: middle; margin-left: 10px; font: 600 11px "Public Sans", system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); background: var(--accent-wash); padding: 3px 8px; border-radius: 3px; }
+  .md h2 .tag.staff, .md h3 .tag.staff { color: var(--brass); background: var(--brass-wash); }
+  .md p, .md ul, .md ol { color: var(--ink-soft); margin: 0 0 14px; }
+  .md li { margin-bottom: 6px; }
+  .md strong { color: var(--ink); font-weight: 600; }
+  .md hr { border: 0; border-top: 1px solid var(--line-soft); margin: 40px 0; }
+  .md code { font-family: "JetBrains Mono", ui-monospace, Consolas, monospace; font-size: .9em; color: var(--accent-deep); }
+  .md pre { background: var(--surface-alt); border: 1px solid var(--line-soft); border-radius: 4px; padding: 14px 16px; overflow-x: auto; margin: 0 0 16px; font-size: 13px; line-height: 1.6; }
+  .md pre code { color: var(--ink); font-size: inherit; }
+  .md table { border-collapse: collapse; width: 100%; font-size: 14.5px; margin: 0 0 16px; display: block; overflow-x: auto; }
+  .md th, .md td { text-align: left; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--line-soft); vertical-align: top; color: var(--ink-soft); }
+  .md th { color: var(--ink-faint); font-size: 12.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+  .md blockquote { margin: 0 0 16px; padding: 4px 0 4px 18px; border-left: 2px solid var(--brass); color: var(--ink-soft); }
+
+  /* staff sections hide as a set until the toggle says otherwise */
+  body:not([data-staff]) .md .staff:not(.keep) { display: none; }
+  body:not([data-staff]) .toc a.staff { display: none; }
+  .hidden-note { display: none; color: var(--ink-faint); font-size: 14px; margin: 24px 0 0; padding-top: 24px; border-top: 1px solid var(--line-soft); }
+  body:not([data-staff]) .hidden-note { display: block; }
+
+  .error { color: var(--ink-soft); padding: 40px 0; }
+  .error code { font-family: "JetBrains Mono", ui-monospace, monospace; color: var(--brass); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="wordmark" href="./" aria-label="Aeshnidae, home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
+        <path d="M12 3v18"/>
+        <path d="M12 8c-3-4-8-4-10-2 2 3 6 4 10 2Zm0 0c3-4 8-4 10-2-2 3-6 4-10 2Z"/>
+        <path d="M12 12c-3-3-7-3-9-1.5 2 2.5 5.5 3 9 1.5Zm0 0c3-3 7-3 9-1.5-2 2.5-5.5 3-9 1.5Z"/>
+      </svg>
+      Aeshnidae
+    </a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="./#join">Join</a>
+      <a href="./#different">What's different</a>
+      <a href="./#rules">House rules</a>
+      <a href="commands.html" aria-current="page">Commands</a>
+      <a href="./#help">Help</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="head">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Reference · straight from the server</p>
+        <h1>Commands</h1>
+        <p>Everything the Aeshnidae mods add, in the same file the server's own staff work from. It updates whenever that file does. ACE's built-in commands aren't listed — <code>/help</code> in game covers those.</p>
+        <p class="meta" id="meta">Loading…</p>
+      </div>
+      <label class="toggle"><input type="checkbox" id="staff"> Show staff commands</label>
+    </div>
+  </section>
+
+  <section class="body">
+    <div class="wrap">
+      <nav class="toc" id="toc" aria-label="Sections"></nav>
+      <div>
+        <article class="md" id="md"></article>
+        <p class="hidden-note">Admin and developer commands are hidden. They're listed for staff under the toggle at the top of the page.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var body = document.body;
+  var box = document.getElementById("staff");
+
+  try { if (localStorage.getItem("aesh.staff") === "1") { body.setAttribute("data-staff", ""); box.checked = true; } } catch (e) {}
+  box.addEventListener("change", function () {
+    if (box.checked) body.setAttribute("data-staff", ""); else body.removeAttribute("data-staff");
+    try { localStorage.setItem("aesh.staff", box.checked ? "1" : "0"); } catch (e) {}
+  });
+
+  var STAFF = /\[(Admin|Developer|Sentinel|Envoy)\]/;
+  var PLAYER = /\[Player\]/;
+
+  function tagHeading(h) {
+    // "[Admin]" at the end of a heading becomes a small label, and decides the section's class.
+    var m = h.textContent.match(/\s*\[(Player|Admin|Developer|Sentinel|Envoy)\]\s*$/);
+    if (!m) return null;
+    h.innerHTML = h.innerHTML.replace(/\s*\[(Player|Admin|Developer|Sentinel|Envoy)\]\s*$/, "");
+    var tag = document.createElement("span");
+    tag.className = "tag" + (m[1] === "Player" ? "" : " staff");
+    tag.textContent = m[1];
+    h.appendChild(tag);
+    return m[1];
+  }
+
+  function render(text, lastModified) {
+    var md = document.getElementById("md");
+    md.innerHTML = marked.parse(text, { mangle: false, headerIds: false });
+
+    var toc = document.getElementById("toc");
+    var nodes = Array.prototype.slice.call(md.children);
+    var sectionStaff = false, keep = false, n = 0;
+
+    nodes.forEach(function (el) {
+      if (el.tagName === "H2") {
+        var level = tagHeading(el);
+        sectionStaff = !!(level && level !== "Player");
+        keep = false;
+        el.id = "s" + (++n);
+        var a = document.createElement("a");
+        a.href = "#" + el.id;
+        a.textContent = el.textContent.replace(/\s*(Player|Admin|Developer|Sentinel|Envoy)$/, "").replace(/\s+—.*$/, "");
+        if (sectionStaff) a.className = "staff";
+        toc.appendChild(a);
+      } else if (el.tagName === "H3") {
+        var lvl = tagHeading(el);
+        // A player-level subsection inside a staff section stays visible for players.
+        keep = sectionStaff && lvl === "Player";
+      }
+      if (sectionStaff) { el.classList.add("staff"); if (keep) el.classList.add("keep"); }
+    });
+
+    // an <hr> that trails a hidden section would otherwise double up
+    nodes.forEach(function (el, i) {
+      if (el.tagName === "HR" && nodes[i - 1] && nodes[i - 1].classList.contains("staff") && !nodes[i - 1].classList.contains("keep")) el.classList.add("staff");
+    });
+
+    var meta = document.getElementById("meta");
+    if (lastModified) {
+      var d = new Date(lastModified);
+      meta.textContent = "Last updated " + d.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) + " at " + d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+    } else {
+      meta.textContent = "";
+    }
+
+    if (location.hash) { var t = document.querySelector(location.hash); if (t) t.scrollIntoView(); }
+  }
+
+  fetch("commands.md", { cache: "no-cache" })
+    .then(function (r) { if (!r.ok) throw new Error(r.status + " " + r.statusText); return r.text().then(function (t) { render(t, r.headers.get("Last-Modified")); }); })
+    .catch(function (err) {
+      document.getElementById("md").innerHTML = '<p class="error">The command list could not be loaded (<code>' + String(err.message || err) + '</code>). Try again in a minute.</p>';
+      document.getElementById("meta").textContent = "";
+    });
+})();
+</script>
+</body>
+</html>
