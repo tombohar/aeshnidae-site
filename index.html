@@ -15,325 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 
-<style>
-  /* ---------- Tokens: dark-first (the un-stamped default on a dark OS) ---------- */
-  :root {
-    color-scheme: dark light;
-    --ground:       #0B1416;
-    --ground-deep:  #070F11;
-    --surface:      #132126;
-    --surface-alt:  #192B31;
-    --ink:          #E7EEEC;
-    --ink-soft:     #A7B9BA;
-    --ink-faint:    #77898C;
-    --line:         #26393E;
-    --line-soft:    #1B2C31;
-    --accent:       #5CC9C2;
-    --accent-deep:  #8FDBD6;
-    --accent-wash:  rgba(92, 201, 194, .10);
-    --brass:        #D6A650;
-    --brass-deep:   #E9C27A;
-    --brass-wash:   rgba(214, 166, 80, .10);
-    --focus:        #8FDBD6;
-    --shadow:       0 1px 2px rgba(0,0,0,.35), 0 18px 40px -22px rgba(0,0,0,.7);
-    --wing-vein:    rgba(92, 201, 194, .34);
-    --wing-edge:    rgba(214, 166, 80, .55);
-    --wing-stigma:  rgba(214, 166, 80, .28);
-  }
-
-  @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) {
-      --ground:       #F1F5F3;
-      --ground-deep:  #E6ECE9;
-      --surface:      #FFFFFF;
-      --surface-alt:  #E9EFEC;
-      --ink:          #13232A;
-      --ink-soft:     #4A5D63;
-      --ink-faint:    #74868C;
-      --line:         #CFDAD6;
-      --line-soft:    #DFE7E3;
-      --accent:       #0E6E75;
-      --accent-deep:  #0A5257;
-      --accent-wash:  rgba(14, 110, 117, .09);
-      --brass:        #96641F;
-      --brass-deep:   #7A5017;
-      --brass-wash:   rgba(150, 100, 31, .10);
-      --focus:        #0E6E75;
-      --shadow:       0 1px 2px rgba(16,40,45,.06), 0 18px 40px -22px rgba(16,40,45,.25);
-      --wing-vein:    rgba(14, 110, 117, .30);
-      --wing-edge:    rgba(150, 100, 31, .55);
-      --wing-stigma:  rgba(150, 100, 31, .22);
-    }
-  }
-  :root[data-theme="light"] {
-    --ground:       #F1F5F3;
-    --ground-deep:  #E6ECE9;
-    --surface:      #FFFFFF;
-    --surface-alt:  #E9EFEC;
-    --ink:          #13232A;
-    --ink-soft:     #4A5D63;
-    --ink-faint:    #74868C;
-    --line:         #CFDAD6;
-    --line-soft:    #DFE7E3;
-    --accent:       #0E6E75;
-    --accent-deep:  #0A5257;
-    --accent-wash:  rgba(14, 110, 117, .09);
-    --brass:        #96641F;
-    --brass-deep:   #7A5017;
-    --brass-wash:   rgba(150, 100, 31, .10);
-    --focus:        #0E6E75;
-    --shadow:       0 1px 2px rgba(16,40,45,.06), 0 18px 40px -22px rgba(16,40,45,.25);
-    --wing-vein:    rgba(14, 110, 117, .30);
-    --wing-edge:    rgba(150, 100, 31, .55);
-    --wing-stigma:  rgba(150, 100, 31, .22);
-  }
-
-  /* ---------- Base ---------- */
-  *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-
-  body {
-    margin: 0;
-    background: var(--ground);
-    color: var(--ink);
-    font-family: "Public Sans", "Segoe UI", system-ui, sans-serif;
-    font-size: 17px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
-
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { color: var(--accent-deep); text-decoration: underline; text-underline-offset: 3px; }
-
-  code, kbd, .mono {
-    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
-    font-size: .92em;
-  }
-  code { color: var(--accent-deep); }
-
-  h1, h2, h3 { text-wrap: balance; margin: 0; }
-  .display {
-    font-family: "Fraunces", "Iowan Old Style", Georgia, serif;
-    font-variation-settings: "opsz" 144;
-    font-weight: 300;
-    letter-spacing: -.01em;
-    line-height: 1.05;
-  }
-  .display em { font-style: italic; font-weight: 300; color: var(--brass); }
-
-  .eyebrow {
-    font-size: 12.5px;
-    font-weight: 600;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-  }
-  .eyebrow .sep { margin: 0 .5em; color: var(--line); }
-
-  .wrap { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
-  .prose { max-width: 62ch; }
-  p { margin: 0; }
-  .lede { font-size: 19px; color: var(--ink-soft); line-height: 1.55; }
-  .soft { color: var(--ink-soft); }
-
-  section { padding-block: 88px; }
-  section + section { border-top: 1px solid var(--line-soft); }
-  .section-head { display: grid; gap: 14px; margin-bottom: 44px; }
-  .section-head h2 { font-size: clamp(30px, 3.6vw, 40px); }
-
-  /* ---------- Nav ---------- */
-  .nav {
-    position: sticky; top: 0; z-index: 10;
-    background: color-mix(in srgb, var(--ground) 86%, transparent);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--line-soft);
-  }
-  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 24px; }
-  .wordmark {
-    font-family: "Fraunces", Georgia, serif;
-    font-variation-settings: "opsz" 40;
-    font-weight: 400;
-    font-size: 22px;
-    color: var(--ink);
-    display: inline-flex; align-items: center; gap: 10px;
-  }
-  .wordmark:hover { text-decoration: none; color: var(--ink); }
-  .wordmark svg { width: 22px; height: 22px; color: var(--accent); }
-  .nav-links { display: flex; gap: 26px; font-size: 14.5px; font-weight: 500; }
-  .nav-links a { color: var(--ink-soft); }
-  .nav-links a:hover { color: var(--ink); text-decoration: none; }
-  @media (max-width: 640px) { .nav-links { display: none; } }
-
-  /* ---------- Hero ---------- */
-  .hero {
-    position: relative;
-    overflow: hidden;
-    padding-block: 96px 80px;
-    background: linear-gradient(180deg, var(--ground) 0%, var(--ground-deep) 100%);
-    border-bottom: 1px solid var(--line-soft);
-  }
-  .hero canvas {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-  }
-  .hero .wrap { position: relative; }
-  .hero-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(300px, .9fr);
-    gap: 56px;
-    align-items: end;
-  }
-  @media (max-width: 880px) { .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; } }
-  .hero h1 { font-size: clamp(44px, 6.4vw, 78px); margin-block: 22px 24px; max-width: 12ch; }
-  .hero .lede { max-width: 52ch; }
-
-  .facts {
-    display: flex; flex-wrap: wrap; gap: 8px 28px;
-    margin-top: 34px;
-    font-size: 14px; color: var(--ink-soft);
-  }
-  .facts span::before {
-    content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%;
-    background: var(--brass); margin-right: 10px; vertical-align: 2px;
-  }
-
-  /* Connection card — the one lifted object on the page */
-  .connect {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    box-shadow: var(--shadow);
-    padding: 22px 24px 20px;
-  }
-  .connect .eyebrow { color: var(--brass); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 12px; }
-  .connect .eyebrow .live { color: var(--ink-faint); letter-spacing: .08em; font-weight: 500; }
-  .connect .eyebrow .live::before {
-    content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%;
-    background: var(--accent); margin-right: 7px; vertical-align: 1px;
-    box-shadow: 0 0 0 3px var(--accent-wash);
-  }
-  .fields { display: grid; margin-top: 14px; }
-  .field {
-    display: grid; grid-template-columns: 84px minmax(0, 1fr) auto; align-items: center; gap: 14px;
-    padding: 11px 0; border-top: 1px solid var(--line-soft);
-  }
-  .field:first-child { border-top: 0; }
-  .field .k { font-size: 12.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-faint); }
-  .field .v { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 17px; font-variant-numeric: tabular-nums; color: var(--ink); overflow-wrap: anywhere; }
-  .field .v.plain { font-family: "Public Sans", system-ui, sans-serif; font-size: 15px; color: var(--ink-soft); }
-  .copy {
-    font: 500 12.5px "Public Sans", system-ui, sans-serif;
-    color: var(--accent); background: transparent;
-    border: 1px solid var(--line); border-radius: 4px;
-    padding: 4px 10px; cursor: pointer; min-width: 64px;
-  }
-  .copy:hover { background: var(--accent-wash); border-color: var(--accent); }
-  .copy[data-done] { color: var(--brass); border-color: var(--brass); }
-  .connect .note { margin-top: 14px; font-size: 13.5px; color: var(--ink-faint); line-height: 1.5; }
-
-  /* ---------- Steps ---------- */
-  .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; }
-  @media (max-width: 880px) { .steps { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
-  .step { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: start; }
-  .step .n {
-    font-family: "Fraunces", Georgia, serif; font-variation-settings: "opsz" 72;
-    font-weight: 300; font-size: 40px; line-height: 1; color: var(--brass);
-    font-variant-numeric: tabular-nums; margin-top: -2px;
-  }
-  .step h3 { font-size: 19px; font-weight: 600; margin-bottom: 8px; line-height: 1.3; }
-  .step p { color: var(--ink-soft); font-size: 15.5px; }
-  .step p + p { margin-top: 8px; }
-  .cmdline {
-    margin-top: 12px; padding: 10px 12px;
-    background: var(--surface-alt); border: 1px solid var(--line-soft); border-radius: 4px;
-    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12.5px; line-height: 1.5;
-    color: var(--ink); overflow-x: auto; white-space: nowrap;
-  }
-  .cmdline b { font-weight: 500; color: var(--brass); }
-
-  /* ---------- Features ---------- */
-  .features {
-    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-    border-top: 1px solid var(--line); border-left: 1px solid var(--line);
-  }
-  @media (max-width: 960px) { .features { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 600px) { .features { grid-template-columns: minmax(0, 1fr); } }
-  .feature {
-    padding: 26px 26px 24px;
-    border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
-    display: grid; grid-template-rows: auto 1fr auto; gap: 12px;
-  }
-  .feature.lead { background: var(--accent-wash); }
-  .feature h3 {
-    font-family: "Fraunces", Georgia, serif; font-variation-settings: "opsz" 40;
-    font-weight: 400; font-size: 23px; line-height: 1.2;
-  }
-  .feature p { color: var(--ink-soft); font-size: 15px; }
-  .feature p strong { color: var(--ink); font-weight: 600; }
-  .feature .cmds { display: grid; gap: 5px; margin-top: 6px; font-size: 13.5px; }
-  .feature .cmds div { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
-  .feature .cmds code { color: var(--accent-deep); white-space: nowrap; }
-  .feature .cmds span { color: var(--ink-faint); }
-
-  /* ---------- Rules ---------- */
-  .rules-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px; align-items: start; }
-  @media (max-width: 880px) { .rules-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; } }
-  .rules { display: grid; }
-  .rule { padding: 20px 0; border-top: 1px solid var(--line-soft); display: grid; gap: 6px; }
-  .rule:last-child { border-bottom: 1px solid var(--line-soft); }
-  .rule h3 {
-    font-family: "Fraunces", Georgia, serif; font-variation-settings: "opsz" 40;
-    font-weight: 400; font-size: 22px;
-  }
-  .rule h3 strong { font-weight: 500; color: var(--brass); }
-  .rule p { color: var(--ink-soft); font-size: 15.5px; }
-  .aside {
-    border-left: 2px solid var(--brass); padding: 4px 0 4px 18px;
-    color: var(--ink-soft); font-size: 15.5px; margin-top: 26px;
-  }
-
-  /* ---------- Chat + audit, two columns ---------- */
-  .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; }
-  @media (max-width: 880px) { .two { grid-template-columns: minmax(0, 1fr); gap: 56px; } }
-  .two h2 { font-size: clamp(26px, 3vw, 32px); margin: 12px 0 18px; }
-  .chan { display: grid; margin-top: 20px; }
-  .chan div { display: grid; grid-template-columns: minmax(120px, 170px) minmax(0, 1fr); gap: 16px; padding: 10px 0; border-top: 1px solid var(--line-soft); font-size: 15px; color: var(--ink-soft); }
-  .chan div:last-child { border-bottom: 1px solid var(--line-soft); }
-  .chan code { color: var(--ink); }
-  .chan .relay { color: var(--brass); font-size: 11.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-left: 8px; }
-  .audit-list { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; color: var(--ink-soft); font-size: 15.5px; }
-  .audit-list li { padding-left: 22px; position: relative; }
-  .audit-list li::before { content: ""; position: absolute; left: 0; top: .62em; width: 10px; height: 1px; background: var(--brass); }
-
-  /* ---------- Troubleshooting ---------- */
-  .faq { display: grid; border-top: 1px solid var(--line-soft); }
-  .faq details { border-bottom: 1px solid var(--line-soft); }
-  .faq summary {
-    cursor: pointer; list-style: none; padding: 18px 0;
-    display: flex; justify-content: space-between; align-items: center; gap: 20px;
-    font-weight: 500; font-size: 17px;
-  }
-  .faq summary::-webkit-details-marker { display: none; }
-  .faq summary::after {
-    content: "+"; font-family: "Fraunces", Georgia, serif; font-weight: 300; font-size: 26px; line-height: 1;
-    color: var(--brass); flex: none; transition: transform .2s ease;
-  }
-  .faq details[open] summary::after { transform: rotate(45deg); }
-  .faq details p { color: var(--ink-soft); font-size: 15.5px; padding-bottom: 20px; max-width: 66ch; }
-  @media (prefers-reduced-motion: reduce) { .faq summary::after { transition: none; } }
-
-  /* ---------- Footer ---------- */
-  footer { border-top: 1px solid var(--line); padding-block: 44px 56px; color: var(--ink-faint); font-size: 14px; }
-  footer .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: start; }
-  @media (max-width: 720px) { footer .wrap { grid-template-columns: minmax(0, 1fr); } }
-  footer p { max-width: 60ch; line-height: 1.6; }
-  footer .mono { color: var(--ink-soft); }
-</style>
+<link rel="stylesheet" href="site.css">
 </head>
 <body>
 
@@ -350,6 +32,7 @@
     <nav class="nav-links" aria-label="Sections">
       <a href="#join">Join</a>
       <a href="#different">What's different</a>
+      <a href="changes.html">Changes</a>
       <a href="#rules">House rules</a>
       <a href="#help">Help</a>
     </nav>
@@ -467,6 +150,7 @@
           <div><code>/bank</code> <code>/b</code><span>balances</span></div>
           <div><code>/b d lk 50</code><span>deposit 50 Legendary Key uses</span></div>
           <div><code>/b w p all</code><span>withdraw every banked pyreal</span></div>
+          <div><code>/bank autolum on</code><span>send earned luminance straight to the bank, past your cap; purchases draw from it</span></div>
         </div>
       </article>
 
@@ -497,6 +181,14 @@
       </article>
 
       <article class="feature">
+        <h3>Personal dungeons</h3>
+        <p>Walk into the <strong>Egg Orchard</strong> and you get your own private copy — nobody else's spawns, nobody else's competition. Each enlightenment makes the monsters in your copy <strong>5% tougher</strong> and the kills <strong>5% more rewarding</strong>, set when you enter. Every character gets their own, so it's solo by design. Dying inside costs no items and no coins.</p>
+        <div class="cmds">
+          <div><code>/instance</code><span>which copy you're in, and its difficulty tier</span></div>
+        </div>
+      </article>
+
+      <article class="feature">
         <h3>Quest bonus</h3>
         <p>Every quest you complete raises a standing experience bonus that applies from then on. The world is worth exploring twice.</p>
         <div class="cmds">
@@ -523,12 +215,24 @@
 
       <article class="feature">
         <h3>Know what you earn</h3>
-        <p>Radiance and Resonance over the last 5, 10, 30 and 60 minutes, the session total and an hourly rate — for working out whether a given dungeon is worth your evening. Kills and quests only; what other players send you doesn't count.</p>
+        <p>Radiance, Resonance and luminance over the last 5, 10, 30 and 60 minutes, the session total and an hourly rate — for working out whether a given dungeon is worth your evening. Kills and quests only; what other players send you doesn't count.</p>
         <div class="cmds">
           <div><code>/earned</code><span>your rate</span></div>
           <div><code>/earned reset</code><span>start the session clock over</span></div>
         </div>
       </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CHANGES (teaser) ================= -->
+<section id="changes" aria-labelledby="changes-title">
+  <div class="wrap">
+    <div class="section-head" style="margin-bottom:0">
+      <p class="eyebrow">The world is not stock either</p>
+      <h2 id="changes-title" class="display">Changes to Dereth</h2>
+      <p class="lede prose">Experience comes in at <strong>half the retail rate</strong> everywhere — the level cap is 500 and enlightenment is meant to be repeated, so the climb is the game and the shortcuts around it are the first things to go. Every change to the world is dated and explained on its own page, and posted to <code>#patch-notes-content</code> in Discord the moment it goes live.</p>
+      <p><a class="button" href="changes.html">Read the full list of changes &rarr;</a></p>
     </div>
   </div>
 </section>
