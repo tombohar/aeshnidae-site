@@ -86,7 +86,7 @@
   .toc a { color: var(--ink-soft); padding: 5px 0 5px 12px; border-left: 2px solid var(--line-soft); line-height: 1.35; }
   .toc a:hover { color: var(--ink); text-decoration: none; border-left-color: var(--accent); }
   .toc a.staff { color: var(--ink-faint); }
-  .toc a.staff::after { content: "staff"; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--brass); margin-left: 8px; }
+  .toc a.staff::after { content: "admin"; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--brass); margin-left: 8px; }
 
   /* the rendered document */
   .md { max-width: 74ch; }
@@ -146,10 +146,10 @@
       <div>
         <p class="eyebrow">Reference · straight from the server</p>
         <h1>Commands</h1>
-        <p>Everything the Aeshnidae mods add, in the same file the server's own staff work from. It updates whenever that file does. ACE's built-in commands aren't listed — <code>/help</code> in game covers those.</p>
+        <p>Everything the Aeshnidae mods add, in the same file the server's admins work from. It updates whenever that file does. ACE's built-in commands aren't listed — <code>/help</code> in game covers those.</p>
         <p class="meta" id="meta">Loading…</p>
       </div>
-      <label class="toggle"><input type="checkbox" id="staff"> Show staff commands</label>
+      <label class="toggle"><input type="checkbox" id="staff"> Show admin and developer commands</label>
     </div>
   </section>
 
@@ -158,7 +158,7 @@
       <nav class="toc" id="toc" aria-label="Sections"></nav>
       <div>
         <article class="md" id="md"></article>
-        <p class="hidden-note">Admin and developer commands are hidden. They're listed for staff under the toggle at the top of the page.</p>
+        <p class="hidden-note">Admin and developer commands are hidden — the toggle at the top of the page shows them.</p>
       </div>
     </div>
   </section>
