@@ -136,10 +136,10 @@
     <div class="features">
       <article class="feature lead">
         <h3>Two currencies, earned by playing</h3>
-        <p><strong>Radiance</strong> comes from monster kills — scaled by what the monster is worth and your share of the damage, and announced in chat as it lands. <strong>Resonance</strong> comes from completing quests, repeatables included. Neither is an item you carry: both go straight into your account's balance and change hands through the bank.</p>
+        <p><strong>Radiance</strong> is experience's mirror: every point of experience you earn — kills, quests, your share of a fellowship's — lands as a point of Radiance too, and it keeps coming at the level cap where experience stops. It's what skill mastery costs. <strong>Resonance</strong> is 10 per quest completed, repeatables included. Neither is an item you carry: both go straight into your account's balance.</p>
         <div class="cmds">
-          <div><code>/bank pay Aeshna radiance 5000</code><span>send 5,000 Radiance to Aeshna</span></div>
-          <div><code>/bank pay Aeshna res 200</code><span>the short forms work too</span></div>
+          <div><code>/b pay Aeshna rad 5m</code><span>send 5 million Radiance to Aeshna (2% fee)</span></div>
+          <div><code>/b pay Aeshna res 200</code><span>Resonance too</span></div>
         </div>
       </article>
 
@@ -147,16 +147,17 @@
         <h3>A shared bank</h3>
         <p>One vault for the whole account: Radiance and Resonance, plus pyreals, luminance and keys you deposit from your pack. Every character you own draws on the same balance, so there's no shuffling between them.</p>
         <div class="cmds">
-          <div><code>/bank</code> <code>/b</code><span>balances</span></div>
-          <div><code>/b d lk 50</code><span>deposit 50 Legendary Key uses</span></div>
-          <div><code>/b w p all</code><span>withdraw every banked pyreal</span></div>
+          <div><code>/b</code><span>balances</span></div>
+          <div><code>/b d</code><span>deposit everything — all pyreals, luminance and keys</span></div>
+          <div><code>/b d lk 50</code><span>or one thing; leave the amount off for all of it</span></div>
+          <div><code>/b w p</code><span>withdraw every banked pyreal</span></div>
           <div><code>/bank autolum on</code><span>send earned luminance straight to the bank, past your cap; purchases draw from it</span></div>
         </div>
       </article>
 
       <article class="feature">
         <h3>Skill mastery</h3>
-        <p>Skills keep going past the retail cap. Ranks are paid for with your own unassigned experience and survive enlightenment — the part of a character that accumulates for good.</p>
+        <p>Skills keep going past the retail cap, priced in <strong>Radiance</strong> along the retail curve — rank 209 costs what rank 209 would have, and each one after is 1.0787× the last, the same climb you already know. +30 in a skill is about a fifth of a climb to 275; +50 is a whole one. Mastery survives enlightenment — the part of a character that accumulates for good.</p>
         <div class="cmds">
           <div><code>/mastery</code><span>what you have, and the next rank's cost</span></div>
           <div><code>/raise &lt;skill&gt; [ranks]</code><span>buy ranks</span></div>
