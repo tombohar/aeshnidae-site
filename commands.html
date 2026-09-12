@@ -77,8 +77,9 @@
   /* layout: sticky section index beside the document */
   .body { padding-block: 40px 96px; }
   .body .wrap { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 56px; align-items: start; }
-  @media (max-width: 880px) { .body .wrap { grid-template-columns: minmax(0, 1fr); } .toc { display: none; } }
   .toc { position: sticky; top: 84px; font-size: 14px; display: grid; gap: 2px; }
+  /* declared after .toc's own display, or the grid would win the cascade and the index would stick over the text */
+  @media (max-width: 880px) { .body .wrap { grid-template-columns: minmax(0, 1fr); } .toc { display: none; } }
   .toc a { color: var(--ink-soft); padding: 5px 0 5px 12px; border-left: 2px solid var(--line-soft); line-height: 1.35; }
   .toc a:hover { color: var(--ink); text-decoration: none; border-left-color: var(--accent); }
   .toc a.staff { color: var(--ink-faint); }
