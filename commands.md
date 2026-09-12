@@ -6,7 +6,7 @@ Access level in brackets. Admin characters meet every level.
 
 ---
 
-## Instanced dungeons — `/noinst` [Admin]
+## Instanced dungeons — `/inst` [Admin]
 
 A dungeon that hands out private copies. The copy keeps the **source landblock id**, so
 the client renders it from the dat it already has — nothing is shipped to anyone.
@@ -14,11 +14,11 @@ the client renders it from the dat it already has — nothing is shipped to anyo
 ### Making a dungeon instanced
 
 ```
-/noinst instance 008D personal        flag it: everyone entering gets their own copy
-/noinst instance 008D fellowship      one copy per party, so groups stay together
-/noinst instance 008D allegiance      one copy per allegiance, shared by all members
-/noinst instance 008D                 unflag it
-/noinst instance                      what is flagged, and how many copies are open
+/inst instance 008D personal        flag it: everyone entering gets their own copy
+/inst instance 008D fellowship      one copy per party, so groups stay together
+/inst instance 008D allegiance      one copy per allegiance, shared by all members
+/inst instance 008D                 unflag it
+/inst instance                      what is flagged, and how many copies are open
 ```
 
 Once flagged, **every** route in works — a portal, a recall, an admin teleport, a login.
@@ -27,14 +27,14 @@ There is nothing to attach to the portal, and no new weenie: the hook is on entr
 ### Looking and testing
 
 ```
-/noinst                  where you are, every open copy, its players and object count
-/noinst count drudge     how many of a thing the master and each copy really hold
-/noinst enter 1          manually put yourself in copy 1 of the dungeon you are standing in
-/noinst leave            back to the server's own version
-/noinst close            drop every copy — anyone inside is recalled to their lifestone
+/inst                  where you are, every open copy, its players and object count
+/inst count drudge     how many of a thing the master and each copy really hold
+/inst enter 1          manually put yourself in copy 1 of the dungeon you are standing in
+/inst leave            back to the server's own version
+/inst close            drop every copy — anyone inside is recalled to their lifestone
 ```
 
-`/noinst count` exists because "is that thing really in this copy, or is my client just
+`/inst count` exists because "is that thing really in this copy, or is my client just
 still showing it to me" is the question that comes up every time something looks wrong,
 and object counts in the log are not an answer.
 
@@ -42,18 +42,18 @@ Rebuilding the mod reloads it, which drops every copy — but players are left s
 where they are and put back into a fresh copy on the next tick, rather than recalled.
 Admins are left in the master on purpose, so authoring survives a rebuild.
 
-`/noinst enter` is for testing. It does **not** flag the dungeon, so it will not survive a
-relog — that is what `/noinst instance` is for.
+`/inst enter` is for testing. It does **not** flag the dungeon, so it will not survive a
+relog — that is what `/inst instance` is for.
 
 ### When something looks wrong
 
 ```
-/noinst count drudge     what the master and each copy really hold, with physics cells
-/noinst resync           clear a phantom player somebody can still see
+/inst count drudge     what the master and each copy really hold, with physics cells
+/inst resync           clear a phantom player somebody can still see
 /instance                which copy you are in [Player]
 ```
 
-`/noinst count` reports, per object, which landblock's cells it is physically in against
+`/inst count` reports, per object, which landblock's cells it is physically in against
 which one lists it. Those are separate facts, and only the first decides what anyone can
 see — a disagreement between them is invisible from every other angle.
 
@@ -63,7 +63,7 @@ under `AUDIT`. Turn it off with `LogRouting` in Settings.json.
 ### Watching a player who is in their own copy
 
 ```
-/noinst goto <player>    join whichever copy they are actually in
+/inst goto <player>    join whichever copy they are actually in
 /teleto <player>         the same — patched to follow players into copies
 /teletome <player>       bring them to you — patched to land them in your copy
 ```
@@ -75,7 +75,7 @@ position cannot tell two copies apart. It now follows the player.
 
 ```
 /instance                which copy of a dungeon you are in, and who shares it
-/noinst help             every command this mod adds, admin and player
+/inst help             every command this mod adds, admin and player
 ```
 
 `/instance` is player-level on purpose: "we can see each other" and "we can't see each
@@ -91,24 +91,24 @@ landblock id. Every copy spawns from those rows. That authored version is the *m
 go to the master *before* creating anything:
 
 ```
-/noinst master                        FIRST — the only version that is authored
+/inst master                        FIRST — the only version that is authored
 /createinst <wcid or classname>       place a permanent object at your feet (ACE, Developer)
 /removeinst                           remove the last object you appraised
-/noinst reload                        push the master into every open copy
+/inst reload                        push the master into every open copy
 ```
 
 Author inside a copy and the object is somewhere only that copy can see, until the copy
 closes and it is gone. The routing log says which landblock a spawn actually landed in —
 `LogRouting` in Settings.json, on by default.
 
-`/noinst master` matters because an admin walking into an instanced dungeon is handed a
+`/inst master` matters because an admin walking into an instanced dungeon is handed a
 private copy like anyone else — edits made there would look right and reach nobody.
 
-`/noinst reload` is the push, and it is needed after **removing** something as well as
+`/inst reload` is the push, and it is needed after **removing** something as well as
 after adding it. `/removeinst` deletes the authored row and the object in front of you;
 copies that are already open keep the creatures they spawned with until they are reloaded
 or they close. An extra monster in someone's copy after you deleted it is that, not a
-duplication bug — `/noinst count <name>` will show you which copies still hold it.
+duplication bug — `/inst count <name>` will show you which copies still hold it.
 
 ACE's own `/reload-landblock` only touches the single landblock you are standing in,
 which for an instanced dungeon is one copy out of however many are open.
@@ -330,6 +330,6 @@ live within five minutes on their own.
 
 `Aeshnidae.Instances` (the dat-patching version) and `Aeshnidae.AllowNewerDats` live in
 `Mods\_disabled\` and cannot load. `Aeshnidae.Instances` provided `/instance`; do not
-confuse it with `/noinst instance`, which belongs to the current mod.
+confuse it with `/inst instance`, which belongs to the current mod.
 
 There is also a `Aeshnidae.DiscordRelay` in `Mods\src\` that is not deployed.
