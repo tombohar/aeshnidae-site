@@ -331,3 +331,10 @@
 }
 .button:hover { background: var(--accent-wash); }
 .nav-links a[aria-current="page"] { color: var(--ink); }
+
+/* value tables inside a change entry (from the note's ``` blocks) */
+.changes pre.values {
+  margin: 4px 0 2px; padding: 12px 14px;
+  background: var(--surface); border: 1px solid var(--line-soft); border-radius: 6px;
+  color: var(--ink-soft); font-size: 13px; line-height: 1.5; overflow-x: auto;
+}
