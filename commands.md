@@ -137,10 +137,10 @@ modified variant of the same dungeon live at the same time.
 ## Skills — `/x`, `/raise`, `/check` [Player]
 
 ```
-/x <skill>                      what the next +1, +5, +10 cost, and how many points you can afford
+/x <skill>                      what the next raise, the next whole point and the one after cost; how many raises you can afford
 /cost <skill>                   the same
-/raise <skill> [n]              buy n mastery points
-/mastery                        every skill you hold mastery in
+/raise <skill> [n]              buy n raises - each raise is a tenth of a mastery point
+/mastery                        every skill you hold mastery in, in tenths
 /check <skill>                  what a skill actually works out to, and where each part comes from
 ```
 
@@ -152,9 +152,12 @@ from ACE's own calculation rather than recomputed.
 
 Mastery is paid for in **Radiance** from the account bank, priced along the retail
 skill curve continued: the first mastery point costs what rank 209 would have, and each
-point after is 1.0787x the one before (the retail table's own tail multiplier). One
-mastery rank is one skill point. Roughly: +30 in a skill totals ~34B Radiance, +50 ~168B
-(about one whole climb to level 275), so the curve is its own ceiling.
+point after is 1.0787x the one before (the retail table's own tail multiplier). A point
+is bought in **ten raises**, each a tenth of the point's price, so a raise is affordable
+from a modest bank and the total for a point is exactly the curve's. Only whole points
+land on the skill: 3.7 shows as +3 until the eighth, ninth and tenth raise. Roughly: +30
+in a skill totals ~34B Radiance, +50 ~168B (about one whole climb to level 275), so the
+curve is its own ceiling.
 
 Mastery survives enlightenment. Retail ranks do not.
 
@@ -236,6 +239,18 @@ For testing. Writes the account balance directly - no earning buffer, no `/earne
 history, no fee. Works from the console (`ace-cmd.sh 'grant radiance 1 Dargoth Hera'`)
 with a player named. Character names can be two words; the name is everything after the
 amount.
+
+```
+/enlightenprep                  give yourself every enlightenment prerequisite
+/enlightenprep Dargoth Hera     give them to an online player
+```
+
+For testing enlightenment without the week of work: raises the player to the level the
+rules currently demand (real experience through the normal level-up path), sets the
+eleven luminance auras to their caps (65 credits - nine at 5, All Skills and Skilled
+Specialization at 10), and makes them a Celestial Hand master. It does **not** enlighten
+- they still walk to the Font - and it does not empty their pack; the 25 free slots are
+theirs to make. Logged to the server log. Player must be online.
 
 ---
 
