@@ -67,12 +67,15 @@
 
   /* page head */
   .head { padding-block: 64px 28px; border-bottom: 1px solid var(--line-soft); }
-  .head .wrap { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .head .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px 40px; align-items: end; }
   @media (max-width: 720px) { .head .wrap { grid-template-columns: minmax(0, 1fr); } }
   h1 { font-family: "Fraunces", Georgia, serif; font-variation-settings: "opsz" 144; font-weight: 300; font-size: clamp(38px, 5vw, 56px); line-height: 1.05; margin: 14px 0 12px; letter-spacing: -.01em; text-wrap: balance; }
   .head p { margin: 0; color: var(--ink-soft); max-width: 60ch; }
   .head .meta { font-size: 13.5px; color: var(--ink-faint); margin-top: 10px; font-variant-numeric: tabular-nums; }
 
+  .toggle { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: var(--ink-soft); cursor: pointer; user-select: none; padding: 8px 12px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
+  .toggle input { accent-color: var(--brass); width: 16px; height: 16px; margin: 0; }
+  .toggle:has(input:checked) { border-color: var(--brass); color: var(--ink); background: var(--brass-wash); }
 
   /* layout: sticky section index beside the document */
   .body { padding-block: 40px 96px; }
@@ -89,7 +92,7 @@
   .md { max-width: 74ch; }
   .md > h1 { display: none; }                      /* the page has its own title */
   .md h2 { font-family: "Fraunces", Georgia, serif; font-variation-settings: "opsz" 40; font-weight: 400; font-size: 28px; line-height: 1.15; margin: 56px 0 14px; padding-top: 8px; letter-spacing: -.005em; text-wrap: balance; }
-  .md > h2:first-child { margin-top: 8px; }
+  .md h2:first-of-type { margin-top: 8px; }
   .md h3 { font-size: 17px; font-weight: 600; margin: 32px 0 10px; }
   .md h2 .tag, .md h3 .tag { display: inline-block; vertical-align: middle; margin-left: 10px; font: 600 11px "Public Sans", system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); background: var(--accent-wash); padding: 3px 8px; border-radius: 3px; }
   .md h2 .tag.staff, .md h3 .tag.staff { color: var(--brass); background: var(--brass-wash); }
@@ -105,11 +108,11 @@
   .md th { color: var(--ink-faint); font-size: 12.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
   .md blockquote { margin: 0 0 16px; padding: 4px 0 4px 18px; border-left: 2px solid var(--brass); color: var(--ink-soft); }
 
-  /* staff sections sit together at the bottom, under one divider */
-  .divider { margin: 72px 0 8px; padding-top: 28px; border-top: 2px solid var(--brass); }
-  .divider .eyebrow { color: var(--brass); }
-  .divider p { color: var(--ink-soft); margin: 8px 0 0; max-width: 60ch; }
-  .toc .label { margin: 14px 0 4px; padding-left: 12px; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--brass); }
+  /* staff sections hide as a set until the toggle says otherwise */
+  body:not([data-staff]) .md .staff:not(.keep) { display: none; }
+  body:not([data-staff]) .toc a.staff { display: none; }
+  .hidden-note { display: none; color: var(--ink-faint); font-size: 14px; margin: 24px 0 0; padding-top: 24px; border-top: 1px solid var(--line-soft); }
+  body:not([data-staff]) .hidden-note { display: block; }
 
   .error { color: var(--ink-soft); padding: 40px 0; }
   .error code { font-family: "JetBrains Mono", ui-monospace, monospace; color: var(--brass); }
@@ -146,6 +149,7 @@
         <p>Everything the Aeshnidae mods add, in the same file the server's own staff work from. It updates whenever that file does. ACE's built-in commands aren't listed — <code>/help</code> in game covers those.</p>
         <p class="meta" id="meta">Loading…</p>
       </div>
+      <label class="toggle"><input type="checkbox" id="staff"> Show staff commands</label>
     </div>
   </section>
 
@@ -154,6 +158,7 @@
       <nav class="toc" id="toc" aria-label="Sections"></nav>
       <div>
         <article class="md" id="md"></article>
+        <p class="hidden-note">Admin and developer commands are hidden. They're listed for staff under the toggle at the top of the page.</p>
       </div>
     </div>
   </section>
@@ -161,13 +166,23 @@
 
 <script>
 (function () {
-  var TAGS = /\s*\[(Player|Admin|Developer|Sentinel|Envoy)\]\s*$/;
+  var body = document.body;
+  var box = document.getElementById("staff");
+
+  try { if (localStorage.getItem("aesh.staff") === "1") { body.setAttribute("data-staff", ""); box.checked = true; } } catch (e) {}
+  box.addEventListener("change", function () {
+    if (box.checked) body.setAttribute("data-staff", ""); else body.removeAttribute("data-staff");
+    try { localStorage.setItem("aesh.staff", box.checked ? "1" : "0"); } catch (e) {}
+  });
+
+  var STAFF = /\[(Admin|Developer|Sentinel|Envoy)\]/;
+  var PLAYER = /\[Player\]/;
 
   function tagHeading(h) {
-    // "[Admin]" at the end of a heading becomes a small label, and decides where the section goes.
-    var m = h.textContent.match(TAGS);
+    // "[Admin]" at the end of a heading becomes a small label, and decides the section's class.
+    var m = h.textContent.match(/\s*\[(Player|Admin|Developer|Sentinel|Envoy)\]\s*$/);
     if (!m) return null;
-    h.innerHTML = h.innerHTML.replace(TAGS, "");
+    h.innerHTML = h.innerHTML.replace(/\s*\[(Player|Admin|Developer|Sentinel|Envoy)\]\s*$/, "");
     var tag = document.createElement("span");
     tag.className = "tag" + (m[1] === "Player" ? "" : " staff");
     tag.textContent = m[1];
@@ -175,64 +190,37 @@
     return m[1];
   }
 
-  function tocEntry(h, staff) {
-    var a = document.createElement("a");
-    a.href = "#" + h.id;
-    a.textContent = h.textContent.replace(/\s*(Player|Admin|Developer|Sentinel|Envoy)$/, "").replace(/\s+—.*$/, "");
-    if (staff) a.className = "staff";
-    return a;
-  }
-
   function render(text, lastModified) {
     var md = document.getElementById("md");
+    md.innerHTML = marked.parse(text, { mangle: false, headerIds: false });
+
     var toc = document.getElementById("toc");
-    var scratch = document.createElement("div");
-    scratch.innerHTML = marked.parse(text, { mangle: false, headerIds: false });
+    var nodes = Array.prototype.slice.call(md.children);
+    var sectionStaff = false, keep = false, n = 0;
 
-    // Walk the document once. Each H2 opens a section that is either player or
-    // staff; a [Player] H3 inside a staff section is lifted out with its content,
-    // so a player never has to read past admin material to find their own command.
-    var player = [], staff = [], playerToc = [], staffToc = [];
-    var inStaff = false, lifted = false, n = 0;
-
-    Array.prototype.slice.call(scratch.children).forEach(function (el) {
-      if (el.tagName === "H1") return;                       // the page has its own title
+    nodes.forEach(function (el) {
       if (el.tagName === "H2") {
         var level = tagHeading(el);
-        inStaff = !!(level && level !== "Player");
-        lifted = false;
+        sectionStaff = !!(level && level !== "Player");
+        keep = false;
         el.id = "s" + (++n);
-        (inStaff ? staffToc : playerToc).push(tocEntry(el, inStaff));
+        var a = document.createElement("a");
+        a.href = "#" + el.id;
+        a.textContent = el.textContent.replace(/\s*(Player|Admin|Developer|Sentinel|Envoy)$/, "").replace(/\s+—.*$/, "");
+        if (sectionStaff) a.className = "staff";
+        toc.appendChild(a);
       } else if (el.tagName === "H3") {
         var lvl = tagHeading(el);
-        lifted = inStaff && lvl === "Player";
-        if (lifted) { el.id = "s" + (++n); playerToc.push(tocEntry(el, false)); }
+        // A player-level subsection inside a staff section stays visible for players.
+        keep = sectionStaff && lvl === "Player";
       }
-      (inStaff && !lifted ? staff : player).push(el);
+      if (sectionStaff) { el.classList.add("staff"); if (keep) el.classList.add("keep"); }
     });
 
-    // A trailing <hr> at the end of either list is just noise.
-    [player, staff].forEach(function (list) { while (list.length && list[list.length - 1].tagName === "HR") list.pop(); });
-
-    player.forEach(function (el) { md.appendChild(el); });
-    playerToc.forEach(function (a) { toc.appendChild(a); });
-
-    if (staff.length) {
-      var div = document.createElement("div");
-      div.className = "divider";
-      div.id = "staff";
-      div.innerHTML = '<p class="eyebrow">Staff · admin and developer commands</p>' +
-                      '<p>Listed for completeness. These need an admin or developer account; typing them on a player character does nothing.</p>';
-      md.appendChild(div);
-
-      var label = document.createElement("div");
-      label.className = "label";
-      label.textContent = "Staff";
-      toc.appendChild(label);
-
-      staff.forEach(function (el) { md.appendChild(el); });
-      staffToc.forEach(function (a) { toc.appendChild(a); });
-    }
+    // an <hr> that trails a hidden section would otherwise double up
+    nodes.forEach(function (el, i) {
+      if (el.tagName === "HR" && nodes[i - 1] && nodes[i - 1].classList.contains("staff") && !nodes[i - 1].classList.contains("keep")) el.classList.add("staff");
+    });
 
     var meta = document.getElementById("meta");
     if (lastModified) {
