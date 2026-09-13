@@ -240,8 +240,8 @@ with a player named. Character names can be two words; the name is everything af
 amount.
 
 ```
-/enlightenprep                  give yourself every enlightenment prerequisite
-/enlightenprep Dargoth Hera     give them to an online player
+/enlighten-prep                 give yourself every enlightenment prerequisite
+/enlighten-prep Dargoth Hera    give them to an online player
 ```
 
 For testing enlightenment without the week of work: raises the player to the level the
