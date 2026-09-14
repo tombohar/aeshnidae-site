@@ -162,6 +162,24 @@ Mastery survives enlightenment. Retail ranks do not.
 
 ---
 
+## Panels — `/hud` [Player, OpenAC only]
+
+```
+/hud on                         start the feed: every panel the server has, drawn as a window
+/hud off                        stop it
+/hud sync                       re-send every panel
+/hud-skills                     re-send just the skills panel
+/hud-bank                       re-send just the bank panel
+```
+
+Only for the OpenAC client with the Aeshnidae HUD plugin, which sends `/hud on` by
+itself after login; in the stock client these commands do nothing visible. The
+**Skills** panel is `/x` for every skill at once, with Raise buttons. The **Bank**
+panel is `/b` as a window: pick a currency, type an amount (blank means all of it),
+Deposit / Withdraw / Pay - every button is the `/b` command you could have typed.
+
+---
+
 ## Experience — retired
 
 `/xp` and `/xpsend` are gone. Experience is not a currency on Aeshnidae and cannot be
