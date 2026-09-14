@@ -52,6 +52,14 @@
     <div class="rules changes">
       <div class="rule">
         <p class="eyebrow">14 September 2026</p>
+        <h3>Movement is now validated, not just watched</h3>
+        <p>Since Thursday the server has been checking every position your client reports against your real top speed and against the world's geometry, and only writing down what it saw. As of today the speed check is enforced: a move the server cannot accept is refused and you are put back where you were. The geometry check still only logs.</p>
+        <p><strong>Why:</strong> teleport plugins work by writing a position into the client and trusting the server to believe it. Two days of watching showed honest play never trips the speed check - not once - so enforcing it costs nobody anything except the people it was built for.</p>
+        <p><strong>What you might notice:</strong> nothing, unless your connection stalls for more than a couple of seconds mid-run, in which case you may get pulled back a few steps. If that happens to you repeatedly, tell staff - the tolerance is a setting.</p>
+        <p><strong>Unchanged:</strong> no one is kicked for it; the geometry check is still log-only.</p>
+      </div>
+      <div class="rule">
+        <p class="eyebrow">14 September 2026</p>
         <h3>Sending Radiance and Resonance is free</h3>
         <p><code>/b pay</code> no longer takes a cut. Send 5,000,000 Radiance and 5,000,000 arrives; until now 2% of every transfer was destroyed in transit.</p>
         <p><strong>Why:</strong> the fee was there as a sink, but Radiance already has one that matters - skill mastery destroys everything you spend on it. Taxing a gift to a friend on top of that only made the currency worse at the one thing a currency is for.</p>
