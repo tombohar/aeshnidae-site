@@ -52,6 +52,14 @@
     <div class="rules changes">
       <div class="rule">
         <p class="eyebrow">14 September 2026</p>
+        <h3>Three fixes from a fairness pass</h3>
+        <p><strong>Fellowship shares now earn Radiance.</strong> The rule has always been that every point of experience you receive lands as Radiance, including your share of a fellow's kill - but the share was being counted for the killer only, and at 75% at that. From now on everyone in the fellowship earns Radiance on their share, exactly as the front page said.</p>
+        <p><strong>Kill tasks and timers no longer count as quests.</strong> Resonance is paid per quest completed; it was also paying 10 per kill while a kill task was running, and again for pickup timers. The Quest Bonus counted every stamp in your quest log - kill-task counters, portal timers, stipend flags - as a solved quest. Both now ignore those and count the quests. Your Quest Bonus will recompute the next time you log in, and may come down a little; the multiplier's ceiling (2.0x) is unchanged.</p>
+        <p><strong>Skill mastery costs the same for every skill.</strong> A mastery point was priced from the skill's advancement class at the moment you bought it, so buying while trained and specializing afterwards came out cheaper than the other way round. One price now, for trained and specialized alike - the trained curve continued, which is the curve <code>/x</code> has always shown. Specialized mastery got about 12% cheaper as a result; nothing else moved.</p>
+        <p><strong>Why:</strong> a pass over the server looking for ways to get ahead without playing. None of these was being abused; all of them could have been.</p>
+      </div>
+      <div class="rule">
+        <p class="eyebrow">14 September 2026</p>
         <h3>Movement is now validated, not just watched</h3>
         <p>Since Saturday the server has been checking every position your client reports against your real top speed and against the world's geometry, and only writing down what it saw. As of today the speed check is enforced: a move the server cannot accept is refused and you are put back where you were. The geometry check still only logs.</p>
         <p><strong>Why:</strong> teleport plugins work by writing a position into the client and trusting the server to believe it. Two days of watching showed honest play never trips the speed check - not once - so enforcing it costs nobody anything except the people it was built for.</p>
