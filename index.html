@@ -16,6 +16,15 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 
 <link rel="stylesheet" href="site.css">
+<noscript><style>
+  @media (max-width: 760px) {
+    .nav-toggle { display: none; }
+    .nav .wrap { height: auto; flex-wrap: wrap; padding-block: 10px; gap: 8px 24px; }
+    .nav-links { display: flex; position: static; flex-direction: row; flex-wrap: wrap;
+                 gap: 4px 16px; font-size: 14px; padding: 0; background: none; border: 0; box-shadow: none; }
+    .nav-links a { padding: 2px 0; }
+  }
+</style></noscript>
 </head>
 <body>
 
@@ -29,7 +38,11 @@
       </svg>
       Aeshnidae
     </a>
-    <nav class="nav-links" aria-label="Sections">
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menu">
+      <svg class="i-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Sections">
       <a href="#join">Join</a>
       <a href="#different">What's different</a>
       <a href="changes.html">Changes</a>
@@ -523,6 +536,24 @@
     layout();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (Math.abs(hero.clientHeight - H) > 2) { instant = true; layout(); } });
   })();
+</script>
+<script>
+// The menu button only exists under 760px; above it the CSS shows the links
+// whatever the data-open state is, so nothing here has to run on resize.
+(function () {
+  var t = document.querySelector(".nav-toggle"), n = document.getElementById("nav-links");
+  if (!t || !n) return;
+  function set(open) {
+    t.setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) n.setAttribute("data-open", ""); else n.removeAttribute("data-open");
+  }
+  t.addEventListener("click", function () { set(t.getAttribute("aria-expanded") !== "true"); });
+  n.addEventListener("click", function (e) { if (e.target.closest("a")) set(false); });
+  document.addEventListener("click", function (e) { if (!e.target.closest(".nav")) set(false); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && t.getAttribute("aria-expanded") === "true") { set(false); t.focus(); }
+  });
+})();
 </script>
 </body>
 </html>
