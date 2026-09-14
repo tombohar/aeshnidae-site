@@ -204,7 +204,7 @@ currencies are Radiance and Resonance - see Banking.
 /b d                            deposit EVERYTHING: all pyreals, luminance and keys
 /b d <item> [n]                 deposit one thing; no amount means all of it
 /b w <item> [n]                 withdraw; no amount means all of it
-/b pay <player> <cur> <n>       send Radiance or Resonance to another account (2% fee, 100,000 min)
+/b pay <player> <cur> <n>       send Radiance or Resonance to another account (no fee, 100,000 min)
 /bank autolum on|off            earned luminance goes straight to the bank, past your cap
 /earned                         Radiance, Resonance and luminance over 5/10/30/60 min, session, per hour
 /earned reset                   start the session clock over
