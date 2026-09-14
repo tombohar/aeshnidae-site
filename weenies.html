@@ -96,7 +96,7 @@
 
   /* controls */
   .controls { position: sticky; top: 60px; z-index: 5; background: var(--ground); padding: 14px 0 12px; border-bottom: 1px solid var(--line-soft); }
-  .controls .wrap { display: grid; gap: 12px; }
+  .controls .wrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .search { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 0 14px; }
   .search:focus-within { border-color: var(--accent); }
   .search svg { width: 18px; height: 18px; color: var(--ink-faint); flex: none; }
@@ -108,21 +108,59 @@
   .chip:hover { border-color: var(--accent); color: var(--ink); }
   .chip[aria-pressed="true"] { background: var(--accent-wash); border-color: var(--accent); color: var(--ink); }
   .chip .n { color: var(--ink-faint); margin-left: 6px; font-variant-numeric: tabular-nums; }
-  .sort { display: flex; gap: 14px; align-items: center; font-size: 13px; color: var(--ink-faint); }
-  .sort button { font: 500 13px "Public Sans", system-ui, sans-serif; color: var(--ink-soft); background: transparent; border: 0; padding: 0; cursor: pointer; }
-  .sort button[aria-pressed="true"] { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--brass); }
+  /* Sorting reads as the category chips do, each carrying its own direction. These
+     are the whole sort control on a phone, where the table head is hidden. */
+  .sort { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .sort-label { font-size: 13px; color: var(--ink-faint); margin-right: 2px; }
+  .sort .chip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px; }
+  .chip .dir { font-size: 11px; line-height: 1; color: var(--brass); }
+  .vh { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
   /* results */
   .results { padding-block: 8px 96px; }
   table { border-collapse: collapse; width: 100%; font-size: 15px; }
-  thead th { text-align: left; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); padding: 14px 12px 10px 0; border-bottom: 1px solid var(--line); }
+  thead th { text-align: left; padding: 0 12px 0 0; border-bottom: 1px solid var(--line); }
+  thead th button { display: inline-flex; align-items: center; gap: 6px; width: 100%; font: 600 12px "Public Sans", system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); background: transparent; border: 0; padding: 14px 0 10px; cursor: pointer; }
+  thead th button:hover { color: var(--ink); }
+  thead th[aria-sort] button { color: var(--ink); }
+  thead th.lvl button { justify-content: flex-end; }
   tbody td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--line-soft); vertical-align: baseline; }
   td.id { color: var(--accent-deep); width: 6.5em; }
   td.name { color: var(--ink); font-weight: 500; }
   td.cls { color: var(--ink-faint); font-size: 13.5px; }
   td.type { color: var(--ink-soft); font-size: 13.5px; white-space: nowrap; }
   td.lvl { color: var(--ink-soft); text-align: right; width: 4em; }
+  /* Between the phone layout and a roomy desktop the five columns don't fit: a mono
+     class name like "1yearanniversaryeffectgen" and a nowrap type like
+     "MissileLauncher · WeaponsMissile" pushed the page 120px wide. Let them wrap
+     rather than shove the whole page sideways. */
+  @media (max-width: 900px) {
+    td.cls { overflow-wrap: anywhere; }
+    td.type { white-space: normal; }
+  }
   @media (max-width: 720px) { td.cls, th.cls { display: none; } }
+
+  /* Phones: the head row goes and each result becomes two lines - name and level on
+     top, wcid and type beneath - so a 390px screen shows a readable list rather than
+     four columns fighting over 340px. Sorting lives entirely in the chips above. */
+  @media (max-width: 560px) {
+    .chip { min-height: 40px; padding: 8px 13px; }  /* thumbs, not cursors */
+    .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; min-width: 0; padding-bottom: 2px; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chips .chip { flex: none; }
+    .sort .chip[data-sort="class"] { display: none; }  /* the class column is hidden here anyway */
+    .search .count .of { display: none; }  /* "1,203", not "1,203 of 43,915" - the box needs the room */
+    thead { display: none; }
+    table, tbody, tbody tr, tbody td { display: block; }
+    tbody tr { display: grid; grid-template-columns: auto 1fr auto; column-gap: 10px; row-gap: 1px; padding: 11px 0; border-bottom: 1px solid var(--line-soft); }
+    tbody td { padding: 0; border: 0; }
+    td.name { grid-area: 1 / 1 / 2 / 3; font-size: 16px; }
+    td.lvl { grid-area: 1 / 3 / 3 / 4; align-self: center; width: auto; font-size: 13.5px; }
+    td.lvl:not(:empty)::before { content: "lv "; color: var(--ink-faint); }
+    td.id { grid-area: 2 / 1 / 3 / 2; font-size: 12.5px; }
+    td.id::before { content: "#"; color: var(--ink-faint); }
+    td.type { grid-area: 2 / 2 / 3 / 3; font-size: 12.5px; white-space: normal; }
+  }
   .more { margin-top: 20px; font: 500 14px "Public Sans", system-ui, sans-serif; color: var(--accent); background: transparent; border: 1px solid var(--line); border-radius: 4px; padding: 9px 16px; cursor: pointer; }
   .more:hover { background: var(--accent-wash); border-color: var(--accent); }
   .empty { color: var(--ink-soft); padding: 40px 0; }
@@ -175,18 +213,30 @@
         <span class="count" id="count"></span>
       </label>
       <div class="chips" id="chips" role="group" aria-label="Category"></div>
-      <div class="sort" id="sort">Sort by
-        <button type="button" data-sort="name" aria-pressed="true">name</button>
-        <button type="button" data-sort="wcid">wcid</button>
-        <button type="button" data-sort="level">level</button>
+      <div class="sort" id="sort" role="group" aria-label="Sort">
+        <span class="sort-label" aria-hidden="true">Sort</span>
+        <button type="button" class="chip" data-sort="wcid" aria-pressed="false">wcid<span class="dir" aria-hidden="true"></span><span class="vh"></span></button>
+        <button type="button" class="chip" data-sort="name" aria-pressed="true">Name<span class="dir" aria-hidden="true"></span><span class="vh"></span></button>
+        <button type="button" class="chip" data-sort="class" aria-pressed="false">Class<span class="dir" aria-hidden="true"></span><span class="vh"></span></button>
+        <button type="button" class="chip" data-sort="type" aria-pressed="false">Type<span class="dir" aria-hidden="true"></span><span class="vh"></span></button>
+        <button type="button" class="chip" data-sort="level" aria-pressed="false">Level<span class="dir" aria-hidden="true"></span><span class="vh"></span></button>
       </div>
+      <p class="vh" id="sort-state" role="status" aria-live="polite"></p>
     </div>
   </section>
 
   <section class="results">
     <div class="wrap">
       <table id="table" hidden>
-        <thead><tr><th>wcid</th><th>Name</th><th class="cls">Class</th><th>Type</th><th style="text-align:right">Level</th></tr></thead>
+        <thead>
+          <tr>
+            <th><button type="button" data-sort="wcid">wcid<span class="dir" aria-hidden="true"></span></button></th>
+            <th aria-sort="ascending"><button type="button" data-sort="name">Name<span class="dir" aria-hidden="true"></span></button></th>
+            <th class="cls"><button type="button" data-sort="class">Class<span class="dir" aria-hidden="true"></span></button></th>
+            <th><button type="button" data-sort="type">Type<span class="dir" aria-hidden="true"></span></button></th>
+            <th class="lvl"><button type="button" data-sort="level">Level<span class="dir" aria-hidden="true"></span></button></th>
+          </tr>
+        </thead>
         <tbody id="rows"></tbody>
       </table>
       <p class="empty" id="empty" hidden>Nothing matches. Try fewer words, or the wcid.</p>
@@ -219,7 +269,25 @@
     ["food", "Food", function (r) { return r[3] === "Food" || r[4] === "Food"; }]
   ];
 
-  var rows = [], view = [], shown = 0, cat = "all", sort = "name", query = "";
+  // Every sortable column, with the direction it opens in: names, classes and types
+  // read best A-Z, wcids lowest-first, levels highest-first. Clicking the field that
+  // is already sorted reverses it, so every column goes both ways.
+  var FIELDS = {
+    wcid:  { label: "wcid",  open: 1,  asc: "lowest first", desc: "highest first" },
+    name:  { label: "name",  open: 1,  asc: "A to Z",       desc: "Z to A" },
+    "class": { label: "class", open: 1, asc: "A to Z",      desc: "Z to A" },
+    type:  { label: "type",  open: 1,  asc: "A to Z",       desc: "Z to A" },
+    level: { label: "level", open: -1, asc: "lowest first", desc: "highest first" }
+  };
+
+  function isField(f) { return Object.prototype.hasOwnProperty.call(FIELDS, f); }
+
+  // One collator, not one per comparison: 44,000 rows is some 700,000 compares and
+  // String.localeCompare is far slower. numeric:true also keeps "Olthoi 2" ahead of
+  // "Olthoi 10", which plain lexical order gets backwards.
+  var coll = new Intl.Collator(undefined, { sensitivity: "base", numeric: true });
+
+  var rows = [], view = [], shown = 0, cat = "all", sort = "name", dir = FIELDS.name.open, query = "";
   var $ = function (id) { return document.getElementById(id); };
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
@@ -233,6 +301,59 @@
     return out;
   }
 
+  // What the Type column shows. Computed once per row at load and kept in r[7], because
+  // the type sort would otherwise rebuild the string on every comparison.
+  function typeText(r) { return r[3] === r[4] || !r[4] || r[4] === "Misc" ? r[3] : r[3] + " · " + r[4]; }
+
+  // wcid is the last tiebreak everywhere, so equal names never shuffle between sorts.
+  function comparator() {
+    var d = dir;
+    if (sort === "wcid") return function (a, b) { return d * (a[0] - b[0]); };
+    if (sort === "level") return function (a, b) { return d * ((a[5] || 0) - (b[5] || 0)) || coll.compare(a[2], b[2]) || a[0] - b[0]; };
+    if (sort === "class") return function (a, b) { return d * coll.compare(a[1], b[1]) || a[0] - b[0]; };
+    if (sort === "type") return function (a, b) { return d * coll.compare(a[7], b[7]) || coll.compare(a[2], b[2]) || a[0] - b[0]; };
+    return function (a, b) { return d * coll.compare(a[2], b[2]) || a[0] - b[0]; };
+  }
+
+  function syncSort() {
+    var f = FIELDS[sort], arrow = dir > 0 ? "↑" : "↓", phrase = dir > 0 ? f.asc : f.desc;
+    Array.prototype.forEach.call(document.querySelectorAll("button[data-sort]"), function (b) {
+      var field = b.getAttribute("data-sort"), meta = FIELDS[field], on = field === sort;
+      var th = b.parentNode.tagName === "TH" ? b.parentNode : null;
+      b.querySelector(".dir").textContent = on ? arrow : "";
+      b.title = on ? "Sorted by " + meta.label + ", " + phrase + " — click to reverse"
+                   : "Sort by " + meta.label + ", " + (meta.open > 0 ? meta.asc : meta.desc);
+      if (th) {
+        // The table's own sort state belongs on the header cell, not the button.
+        if (on) th.setAttribute("aria-sort", dir > 0 ? "ascending" : "descending");
+        else th.removeAttribute("aria-sort");
+      } else {
+        b.setAttribute("aria-pressed", on ? "true" : "false");
+        b.querySelector(".vh").textContent = on ? ", " + phrase + ", click to reverse" : "";
+      }
+    });
+    $("sort-state").textContent = "Sorted by " + f.label + ", " + phrase + ".";
+  }
+
+  function setSort(field) {
+    if (!isField(field)) return;
+    if (field === sort) dir = -dir;              // same field again: turn it around
+    else { sort = field; dir = FIELDS[field].open; }
+    syncSort();
+    apply();
+  }
+
+  // Search, category and sort all live in the query string, so any view of the list -
+  // "every portal by wcid", "olthoi by level" - is a link someone can paste in Discord.
+  function syncURL() {
+    var p = new URLSearchParams();
+    if (query) p.set("q", query);
+    if (cat !== "all") p.set("cat", cat);
+    if (sort !== "name" || dir !== FIELDS.name.open) { p.set("sort", sort); p.set("dir", dir > 0 ? "asc" : "desc"); }
+    var qs = p.toString();
+    try { history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash); } catch (e) { /* file:// */ }
+  }
+
   function apply() {
     var terms = query.toLowerCase().split(/\s+/).filter(Boolean);
     var pred = CATS.filter(function (c) { return c[0] === cat; })[0][2];
@@ -241,14 +362,13 @@
       if (!terms.length) return true;
       return terms.every(function (t) { return r[6].indexOf(t) !== -1; });
     });
-    if (sort === "name") view.sort(function (a, b) { return a[2].localeCompare(b[2]) || a[0] - b[0]; });
-    else if (sort === "wcid") view.sort(function (a, b) { return a[0] - b[0]; });
-    else view.sort(function (a, b) { return b[5] - a[5] || a[2].localeCompare(b[2]); });
+    view.sort(comparator());
     shown = 0;
     $("rows").innerHTML = "";
-    $("count").textContent = view.length.toLocaleString() + " of " + rows.length.toLocaleString();
+    $("count").innerHTML = view.length.toLocaleString() + "<span class=\"of\"> of " + rows.length.toLocaleString() + "</span>";
     $("empty").hidden = view.length > 0;
     $("table").hidden = view.length === 0;
+    syncURL();
     more(terms);
   }
 
@@ -260,7 +380,7 @@
       html += "<tr><td class=\"id mono\">" + highlight(r[0], terms) + "</td>" +
               "<td class=\"name\">" + highlight(r[2], terms) + "</td>" +
               "<td class=\"cls mono\">" + highlight(r[1], terms) + "</td>" +
-              "<td class=\"type\">" + esc(r[3] === r[4] || !r[4] || r[4] === "Misc" ? r[3] : r[3] + " · " + r[4]) + "</td>" +
+              "<td class=\"type\">" + esc(r[7]) + "</td>" +
               "<td class=\"lvl mono\">" + (r[5] ? r[5] : "") + "</td></tr>";
     }
     $("rows").insertAdjacentHTML("beforeend", html);
@@ -290,29 +410,41 @@
   var timer;
   $("q").addEventListener("input", function () { clearTimeout(timer); timer = setTimeout(function () { query = $("q").value.trim(); apply(); }, 120); });
   $("more").addEventListener("click", function () { more(); });
-  $("sort").addEventListener("click", function (e) {
-    var b = e.target.closest("button[data-sort]"); if (!b) return;
-    sort = b.dataset.sort;
-    $("sort").querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
-    apply();
+  // One handler for both sets of controls: the chips above and the table heads.
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-sort]");
+    if (b) setSort(b.getAttribute("data-sort"));
   });
 
-  // ?q= deep links, so a weenie can be pointed at from Discord.
-  var initial = new URLSearchParams(location.search).get("q");
-  if (initial) $("q").value = initial;
+  // Deep links, so a weenie - or a whole sorted view - can be pointed at from Discord.
+  var params = new URLSearchParams(location.search);
+  if (params.get("q")) $("q").value = params.get("q");
+  if (isField(params.get("sort"))) {
+    sort = params.get("sort");
+    dir = params.get("dir") === "asc" ? 1 : params.get("dir") === "desc" ? -1 : FIELDS[sort].open;
+  }
 
   fetch("weenies.json", { cache: "default" })
     .then(function (r) { if (!r.ok) throw new Error(r.status + " " + r.statusText); return r.json(); })
     .then(function (d) {
       rows = d.rows;
-      // one lowercase haystack per row: "wcid class name"
-      rows.forEach(function (r) { r[6] = (r[0] + " " + r[1] + " " + r[2]).toLowerCase(); });
+      // one lowercase haystack per row: "wcid class name", plus the type text the
+      // Type column and the type sort both read
+      rows.forEach(function (r) { r[6] = (r[0] + " " + r[1] + " " + r[2]).toLowerCase(); r[7] = typeText(r); });
       var when = new Date(d.generated);
       $("meta").textContent = rows.length.toLocaleString() + " weenies · from the live world database, " + when.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
       buildChips();
+      var wantCat = params.get("cat");
+      if (wantCat && CATS.some(function (c) { return c[0] === wantCat; })) {
+        cat = wantCat;
+        $("chips").querySelectorAll(".chip").forEach(function (x) { x.setAttribute("aria-pressed", x.dataset.cat === cat ? "true" : "false"); });
+      }
       query = $("q").value.trim();
+      syncSort();
       apply();
-      $("q").focus();
+      // Focusing the box on a phone throws the keyboard up over the list before the
+      // reader has seen it, so only the desktop layout gets the cursor.
+      if (window.matchMedia("(min-width: 761px)").matches) $("q").focus();
     })
     .catch(function (err) {
       $("meta").textContent = "The list could not be loaded (" + (err.message || err) + "). Try again in a minute.";
