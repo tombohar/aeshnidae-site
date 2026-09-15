@@ -69,6 +69,17 @@
     <div class="rules changes">
       <div class="rule">
         <p class="eyebrow">15 September 2026</p>
+        <h3>Two new reference pages: every weenie property, every ACE command</h3>
+        <p>Two additions to the site, in the menu beside the weenie list.</p>
+        <p><strong>Properties</strong> lists all 964 properties the server can hang on a weenie - every creature, item, portal and NPC in Dereth is built out of these. Each says what it does, which table it lives in, the number that identifies it, and whether it shows up when you appraise something, is sent to your client at login, or is only ever held in memory. 234 are marked *unread*: ACE defines them but never looks at them, so they are retail leftovers that do nothing at all.</p>
+        <p><strong>ACE commands</strong> lists all 321 commands the server knows, grouped by who may run them - 14 are open to anyone, the rest are staff. Each says what it does and where it works, which matters more than it sounds: only 111 can be run from the server console, and the rest need a character standing in the world.</p>
+        <p><strong>Why:</strong> ACE ships no documentation for either of these. Knowing which properties do nothing saves real time, and until now the only way to find out was to read the source.</p>
+        <p>One caveat worth stating plainly: the <strong>command</strong> descriptions are ACE's own, taken from the code. The <strong>property</strong> descriptions are ours - the enums carry names and numbers and almost no explanation - so treat that page as a good map rather than gospel, and check the source before leaning on an obscure one.</p>
+        <p>Both pages are the whole list with a search box over it, so your browser's own find works across all of it.</p>
+        <p><strong>Unchanged:</strong> nothing in the game. These are reference pages.</p>
+      </div>
+      <div class="rule">
+        <p class="eyebrow">15 September 2026</p>
         <h3>The site works on a phone now</h3>
         <p>On a phone the menu at the top of the site used to vanish completely - no Join, no Commands, no Weenies, nothing. The only way to reach a page was to type its address. Every page now has a menu button in the top right with every link in it.</p>
         <p>The weenie list got the same attention. Each result is two lines - name and level, with the wcid and type beneath - instead of four columns fighting over the width of a phone. Sorting is a row of buttons you can actually hit with a thumb: <strong>wcid, Name, Type, Level</strong>. Tap one to sort by it, tap it again to turn it around. Before this, name only ran A to Z, wcid only ran lowest-first and level only ran highest-first; there was no way to ask for the other direction. On a desktop the column headings do the same job.</p>
