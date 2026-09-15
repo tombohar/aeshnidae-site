@@ -60,10 +60,10 @@
   .nav-links a:hover, .nav-links a[aria-current] { color: var(--ink); text-decoration: none; }
   @media (max-width: 980px) { .nav-links { gap: 16px; font-size: 13.5px; } }
 
-  /* Under 760px the links fold behind a menu button. They used to be display:none
+  /* Under 880px the links fold behind a menu button. They used to be display:none
      with nothing in their place, which left Commands and Weenies unreachable on a phone. */
   .nav-toggle { display: none; }
-  @media (max-width: 760px) {
+  @media (max-width: 880px) {
     .nav .wrap { position: relative; }
     .nav-toggle {
       display: inline-flex; align-items: center; justify-content: center;
@@ -190,6 +190,8 @@
       <a href="./#rules">House rules</a>
       <a href="commands.html">Commands</a>
       <a href="weenies.html" aria-current="page">Weenies</a>
+      <a href="properties.html">Properties</a>
+      <a href="ace-commands.html">ACE commands</a>
       <a href="./#help">Help</a>
     </nav>
   </div>
@@ -444,7 +446,7 @@
       apply();
       // Focusing the box on a phone throws the keyboard up over the list before the
       // reader has seen it, so only the desktop layout gets the cursor.
-      if (window.matchMedia("(min-width: 761px)").matches) $("q").focus();
+      if (window.matchMedia("(min-width: 881px)").matches) $("q").focus();
     })
     .catch(function (err) {
       $("meta").textContent = "The list could not be loaded (" + (err.message || err) + "). Try again in a minute.";
